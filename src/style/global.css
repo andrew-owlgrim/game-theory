@@ -1,0 +1,51 @@
+/* Fonts */
+
+@import url("https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap");
+
+@font-face {
+  font-family: "Clash Grotesk";
+  src: url("../assets/fonts/ClashGrotesk-Variable.woff2")
+    format("woff2-variations");
+  font-weight: 200 700;
+  font-style: normal;
+}
+
+body {
+  font-family: "Onest", sans-serif;
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 400;
+}
+
+/* Features */
+
+/* width */
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+  background: none;
+}
+
+/* Track */
+.scrollbar::-webkit-scrollbar-track {
+  background: #fff1;
+}
+
+/* Handle */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #ffff;
+}
+
+/* Handle on hover */
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #fffa;
+}
+
+/* Hide scrollbar */
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
