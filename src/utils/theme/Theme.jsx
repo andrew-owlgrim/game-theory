@@ -1,8 +1,17 @@
-import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import { colors, hexa, themeColors } from "./color";
-import { baseUnit, baseUnits, getGrid, getScreen, getSpace } from "./size";
 import { useCallback, useMemo, useState, useEffect } from "react";
-import getTypography, { textSize, typographyMixin } from "./typography";
+import { ThemeProvider as StyledThemeProvider } from "styled-components";
+
+// theme modules
+import { hexa, getThemeColors, overlay } from "./color";
+import {
+  baseUnit,
+  baseUnits,
+  getGrid,
+  getScreen,
+  getSpace,
+  getTextSizeValues,
+} from "./size";
+import { textStyle, getTextSizes, getTextSize } from "./typography";
 import mixin from "./mixin";
 
 // Provider
@@ -26,17 +35,20 @@ const ThemeProvider = ({ children }) => {
 
   // Create theme object
 
-  const color = useMemo(() => ({ ...colors, ...themeColors[mode] }), [mode]);
+  const color = useMemo(() => getThemeColors(mode), [mode]);
   const size = useMemo(
     () => ({
       baseUnit,
       baseUnits,
       space: getSpace(screen),
       grid: getGrid(screen, screenWidth),
+      textSize: {
+        ...getTextSizes(getTextSizeValues(screen)),
+        custom: getTextSize,
+      },
     }),
     [screen, screenWidth]
   );
-  const typography = useMemo(() => getTypography(screen), [screen]);
 
   const theme = {
     mode,
@@ -44,10 +56,9 @@ const ThemeProvider = ({ children }) => {
     screen,
     color,
     hexa,
+    overlay,
     ...size,
-    typography,
-    typographyMixin,
-    textSize,
+    textStyle,
     mixin,
   };
 

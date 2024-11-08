@@ -6,19 +6,17 @@ export const baseUnits = (n) => baseUnit * n;
 // Space
 
 const spaceConfig = {
-  xs: { default: 0.25 },
-  s: { default: 0.5 },
+  xs: { default: 0.2 },
+  s: { default: 0.4 },
+  sm: { default: 0.6 },
   m: { default: 1 },
   l: { default: 2, mobile: 1.5 },
   xl: { default: 4, tablet: 3, mobile: 2 },
 };
 
 export const getSpace = (screen) => {
-  const space = {};
-  for (let key in spaceConfig) {
-    space[key] =
-      (spaceConfig[key][screen] || spaceConfig[key].default) * baseUnit;
-  }
+  const space = parseScreen(spaceConfig, screen);
+  for (let key in space) space[key] *= baseUnit;
   return space;
 };
 
@@ -49,10 +47,7 @@ const gridConfig = {
 
 export const getGrid = (screen, screenWidth) => {
   // get grid values for current screen
-  const grid = {};
-  for (let key in gridConfig) {
-    grid[key] = gridConfig[key][screen] || gridConfig[key].default;
-  }
+  const grid = parseScreen(gridConfig, screen);
 
   // adjust values
   if (!grid.gridWidth) grid.gridWidth = screenWidth;
@@ -70,3 +65,30 @@ export const getGrid = (screen, screenWidth) => {
 
   return grid;
 };
+
+// Text
+
+const textSizeConfig = {
+  h1: { default: 3, tablet: 2.5, mobile: 2 },
+  h2: { default: 2, mobile: 1.5 },
+  h3: { default: 1.5, module: 1.25 },
+  h4: { default: 1.25 },
+  lead: { default: 1.25 },
+  text: { default: 1 },
+  ui: { default: 1 },
+  caption: { default: 0.75 },
+};
+
+export function getTextSizeValues(screen) {
+  return parseScreen(textSizeConfig, screen);
+}
+
+// Utils
+
+function parseScreen(object, screen) {
+  const result = {};
+  for (let key in object) {
+    result[key] = object[key][screen] || object[key].default;
+  }
+  return result;
+}

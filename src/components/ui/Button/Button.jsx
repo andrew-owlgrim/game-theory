@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { sizeConfig, variantConfig } from "./config";
+import { generalConfig, sizeConfig, variantConfig } from "./config";
 
 // Component
 
@@ -21,21 +21,25 @@ const Button = ({ variant, size, round, col, children, ...props }) => {
 const StyledButton = styled.button.attrs({
   className: "button",
 })`
+  flex-shrink: 0;
+
   display: flex;
   flex-direction: ${({ $col }) => ($col ? "column" : "row")};
   align-items: center;
 
   border-radius: ${({ theme, $round }) =>
-    $round ? 666 : theme.baseUnits(0.25)}px;
+    $round ? 666 : theme.baseUnits(generalConfig.borderRadius)}px;
   border: none;
   outline: none;
-  transition: all 0.2s ease;
+  user-select: none;
   cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(5);
 
   ${({ theme }) => theme.mixin.before}
   &::before {
     border-radius: ${({ theme, $round }) =>
-      $round ? 666 : theme.baseUnits(0.25)}px;
+      $round ? 666 : theme.baseUnits(generalConfig.borderRadius)}px;
   }
 
   ${sizeMixin}
@@ -53,14 +57,16 @@ function wrapTextNodes(children) {
 function sizeMixin({ theme, $size, $round }) {
   const paddingV =
     ($size && sizeConfig[$size].padding) || sizeConfig.default.padding;
-  const paddingH = $round ? paddingV * 2 : paddingV;
+  const paddingH = $round
+    ? paddingV * generalConfig.roundPaddingHRatio
+    : paddingV;
   const fontSize = sizeConfig[$size]?.fontSize || sizeConfig.default.fontSize;
 
   return css`
     padding: ${theme.baseUnits(paddingV)}px ${theme.baseUnits(paddingH)}px;
-    gap: ${theme.baseUnits(fontSize * 0.25)}px;
+    gap: ${theme.baseUnits(fontSize * generalConfig.gap)}px;
 
-    ${theme.textSize(fontSize, "ui")}
+    ${theme.textSize.custom(fontSize)}
 
     svg,
     .icon {
@@ -69,7 +75,7 @@ function sizeMixin({ theme, $size, $round }) {
     }
 
     span {
-      padding: 0 ${theme.baseUnits(fontSize * 0.25)}px;
+      padding: 0 ${theme.baseUnits(fontSize * generalConfig.gap)}px;
     }
   `;
 }

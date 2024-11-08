@@ -1,29 +1,44 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import Link from "../components/ui/Link";
-import Button from "../components/ui/Button";
+import Button from "../components/ui/Button/Button";
+import Switch from "../components/ui/Switch";
+import { MoonIcon, SunIcon } from "../components/ui/Icons";
 const HomePage = () => {
   const navigate = useNavigate();
+  const { setMode } = useTheme();
+
+  const onModeSwitchChange = (index) => setMode(index == 0 ? "light" : "dark");
 
   return (
     <PageContainer>
       <aside>
-        <h1>Гра в яку грають люди</h1>
+        <h1>Game people play</h1>
         <div className="links">
           <Link>Author</Link>
           <Link>Game rules</Link>
-          {/* <Switch>
-            <SwitchOption></SwitchOption>
-          </Switch> */}
         </div>
       </aside>
       <Button
-        variant={"default"}
+        variant={"primary"}
         className="start-game"
+        size="m"
         onClick={() => navigate("/game")}
       >
         Start game
       </Button>
+      <Button
+        variant={"default"}
+        className="start-game"
+        size="m"
+        onClick={() => navigate("/game")}
+      >
+        Start game
+      </Button>
+      <Switch
+        options={[<SunIcon />, <MoonIcon />]}
+        onChange={onModeSwitchChange}
+      />
     </PageContainer>
   );
 };
@@ -34,11 +49,10 @@ const PageContainer = styled.div`
 
   display: flex;
   flex-direction: row;
-  padding: ${({ theme }) => theme.space.xl}px;
+  align-items: center;
 
-  .start-game {
-    align-self: flex-start;
-  }
+  gap: ${({ theme }) => theme.space.s}px;
+  padding: ${({ theme }) => theme.space.xl}px;
 `;
 
 export default HomePage;

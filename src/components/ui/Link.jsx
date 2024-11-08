@@ -5,7 +5,7 @@ const Link = ({ children, ...props }) => {
 };
 
 const StyledA = styled.a`
-  border-bottom: 1px solid ${({ theme }) => theme.colors?.main || "black"};
+  border-bottom: 1px solid ${({ theme }) => theme.color?.main?.main || "black"};
 `;
 
 export default Link;
