@@ -1,48 +1,25 @@
-import { objectMap } from "../common";
+import { objectMap } from "../../common";
+import cfg from "../Theme.cfg";
 
-const colors = {
-  white: hsbToHex(0, 0, 100),
-  black: hsbToHex(0, 0, 12),
-  gray: hsbToHex(230, 30, 50),
-  lime: hsbToHex(80, 70, 80),
-  green: hsbToHex(110, 70, 80),
-  mint: hsbToHex(160, 70, 80),
-  lightblue: hsbToHex(200, 70, 100),
-  blue: hsbToHex(230, 70, 100),
-  purple: hsbToHex(260, 60, 100),
-  liliac: hsbToHex(290, 60, 100),
-  pink: hsbToHex(320, 65, 100),
-  red: hsbToHex(350, 70, 100),
-  redDark: hsbToHex(350, 70, 100),
-  orange: hsbToHex(15, 70, 100),
-  yellow: hsbToHex(40, 70, 100),
-  brown: hsbToHex(30, 70, 80),
-};
-
-colors.bg = { light: colors.white, dark: colors.black };
-colors.main = { light: colors.black, dark: colors.white };
-colors.primary = colors.pink;
-colors.danger = colors.red;
-
-function getThemeColor(hex) {
-  return {
-    tile: hexa(hex, 0.04),
-    bg: hexa(hex, 0.08),
-    border: hexa(hex, 0.16),
-    tertiary: hexa(hex, 0.33),
-    secondary: hexa(hex, 0.5),
-    main: hex,
-  };
-}
+// Theme
 
 export function getThemeColors(mode) {
-  return objectMap(colors, (v) => {
-    if (typeof v === "object") return getThemeColor(v[mode]);
-    else if (typeof v === "string") return getThemeColor(v);
+  const currentColor = parseMode(cfg.color, mode);
+  return objectMap(currentColor, (v) => getThemeColor(v, cfg.colorRoles));
+}
+
+function getThemeColor(hex, roles) {
+  return objectMap(roles, (v) => hexa(hex, v));
+}
+
+function parseMode(color, mode) {
+  return objectMap(color, (v) => {
+    if (typeof v === "object") return v[mode];
+    else if (typeof v === "string") return v;
   });
 }
 
-// Utils
+// Overlay
 
 export function overlay(hexBottom, hexTop) {
   const bottom = hexToRgba(hexBottom);
@@ -65,7 +42,7 @@ export function overlay(hexBottom, hexTop) {
 
 // Convert
 
-function hsbToHex(h, s, b) {
+export function hsbToHex(h, s, b) {
   let [red, green, blue] = hsbToRGB(h, s, b);
   return rgbToHex(red, green, blue);
 }

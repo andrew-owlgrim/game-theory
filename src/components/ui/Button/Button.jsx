@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { generalConfig, sizeConfig, variantConfig } from "./config";
+import { wrapTextNodes } from "../../../utils/common";
 
 // Component
 
@@ -18,72 +18,109 @@ const Button = ({ variant, size, round, col, children, ...props }) => {
   );
 };
 
-const StyledButton = styled.button.attrs({
-  className: "button",
-})`
-  flex-shrink: 0;
+// Style
 
-  display: flex;
-  flex-direction: ${({ $col }) => ($col ? "column" : "row")};
-  align-items: center;
+const padding = { default: 0.4, s: 0.2, m: 0.4, l: 0.6 };
 
-  border-radius: ${({ theme, $round }) =>
-    $round ? 666 : theme.baseUnits(generalConfig.borderRadius)}px;
-  border: none;
-  outline: none;
-  user-select: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(5);
-
-  ${({ theme }) => theme.mixin.before}
-  &::before {
-    border-radius: ${({ theme, $round }) =>
-      $round ? 666 : theme.baseUnits(generalConfig.borderRadius)}px;
-  }
-
-  ${sizeMixin}
-  ${variantMixin}
-`;
-
-// Utils
-
-function wrapTextNodes(children) {
-  return React.Children.map(children, (child) =>
-    typeof child === "string" ? <span>{child}</span> : child
-  );
-}
-
-function sizeMixin({ theme, $size, $round }) {
-  const paddingV =
-    ($size && sizeConfig[$size].padding) || sizeConfig.default.padding;
-  const paddingH = $round
-    ? paddingV * generalConfig.roundPaddingHRatio
-    : paddingV;
-  const fontSize = sizeConfig[$size]?.fontSize || sizeConfig.default.fontSize;
+const buttonCss = ({ theme, $variant, $size, $round, $col }) => {
+  const direction = $col ? "col" : "row";
+  const paddingV = ($size ? padding[$size] : padding.default) * theme.size();
+  const paddingH = $round ? paddingV * 1.333 : paddingV;
+  const radius = $round ? 666 : theme.size(0.2);
+  const variant = $variant
+    ? variants[$variant](theme)
+    : variants.default(theme);
 
   return css`
-    padding: ${theme.baseUnits(paddingV)}px ${theme.baseUnits(paddingH)}px;
-    gap: ${theme.baseUnits(fontSize * generalConfig.gap)}px;
+    flex-shrink: 0;
 
-    ${theme.textSize.custom(fontSize)}
+    ${theme.mixin.flex(direction, "center", "center", theme.size(0.2), [
+      paddingV,
+      paddingH,
+    ])}
+
+    border-radius: ${radius}px;
+    border: none;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    transition: all 200ms ease;
+    backdrop-filter: blur(5);
+
+    ${theme.textStyle.ui}
+    ${theme.textSize.ui}
+
+    ${theme.mixin.before}
+    &::before {
+      border-radius: ${radius}px;
+    }
 
     svg,
     .icon {
-      width: ${theme.baseUnits(fontSize)}px;
-      height: ${theme.baseUnits(fontSize)}px;
+      width: ${theme.size()}px;
+      height: ${theme.size()}px;
     }
 
-    span {
-      padding: 0 ${theme.baseUnits(fontSize * generalConfig.gap)}px;
+    span,
+    .wrapped-text {
+      padding: 0 ${theme.size(0.2)}px;
     }
+
+    ${variant}
   `;
-}
+};
 
-function variantMixin({ theme, $variant }) {
-  return $variant
-    ? variantConfig[$variant](theme)
-    : variantConfig.default(theme);
-}
+const StyledButton = styled.button.attrs({
+  className: "button",
+})`
+  ${buttonCss}
+`;
+
+// Variants
+
+const variants = {};
+
+variants.default = (theme) => css`
+  color: ${theme.color.main.main};
+  background: transparent;
+  outline: 3px solid transparent;
+
+  &::before {
+    border: 1px solid ${theme.color.main.border};
+  }
+
+  &:hover {
+    background: ${theme.color.main.bbg};
+  }
+
+  &:active {
+    background: ${theme.color.main.bg};
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${theme.color.main.bg};
+  }
+`;
+
+variants.primary = (theme) => css`
+  color: ${theme.color.bg.main};
+  background: ${theme.color.main.main};
+  outline: 3px solid transparent;
+
+  &:hover {
+    background: ${theme.color.main.primary};
+  }
+
+  &:active {
+    background: ${theme.color.main.active};
+  }
+
+  &:focus-visible {
+    background: ${theme.color.main.primary};
+    outline: 3px solid ${theme.color.main.bg};
+  }
+`;
+
+//
 
 export default Button;
