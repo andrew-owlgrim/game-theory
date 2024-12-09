@@ -27,9 +27,10 @@ const buttonCss = ({ theme, $variant, $size, $round, $col }) => {
   const paddingV = ($size ? padding[$size] : padding.default) * theme.size();
   const paddingH = $round ? paddingV * 1.333 : paddingV;
   const radius = $round ? 666 : theme.size(0.2);
-  const variant = $variant
-    ? variants[$variant](theme)
-    : variants.default(theme);
+  const variant =
+    $variant && variants[$variant]
+      ? variants[$variant](theme, paddingV, paddingH)
+      : variants.default(theme);
 
   return css`
     flex-shrink: 0;
@@ -117,6 +118,25 @@ variants.primary = (theme) => css`
 
   &:focus-visible {
     background: ${theme.color.main.primary};
+    outline: 3px solid ${theme.color.main.bg};
+  }
+`;
+
+variants.bare = (theme, paddingV, paddingH) => css`
+  color: ${theme.color.main.main};
+  background: transparent;
+  outline: 3px solid transparent;
+  margin: ${-paddingV}px ${-paddingH}px;
+
+  &:hover {
+    background: ${theme.color.main.bbg};
+  }
+
+  &:active {
+    background: ${theme.color.main.bg};
+  }
+
+  &:focus-visible {
     outline: 3px solid ${theme.color.main.bg};
   }
 `;

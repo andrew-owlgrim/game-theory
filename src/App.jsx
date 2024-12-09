@@ -1,12 +1,13 @@
 import "./style/reset.css";
-import "./style/global.css";
+import "./style/fonts.css";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import HomePage from "./pages/Home/Home";
-import GamePage from "./pages/Game";
+import HomePage from "./pages/Home/HomePage";
+import GamePage from "./pages/Game/GamePage";
 import NoPage from "./pages/NoPage";
 import ThemeProvider from "./utils/Theme/Theme";
 import { LocaleProvider } from "./utils/localization/localization";
 import { createGlobalStyle, css } from "styled-components";
+import GlobalStyle from "./style/globalStyle";
 
 function App() {
   return (
@@ -24,57 +25,5 @@ function App() {
     </ThemeProvider>
   );
 }
-
-// Style
-
-const globalCss = ({ theme }) => {
-  return css`
-    body {
-      background: ${theme.color.bg.main};
-      color: ${theme.color.main.main};
-
-      ${theme.textStyle.text};
-    }
-
-    h1,
-    .h1 {
-      ${theme.textStyle.title};
-      ${theme.textSize.h1};
-    }
-
-    h2,
-    .h2 {
-      ${theme.textStyle.title};
-      ${theme.textSize.h2};
-    }
-
-    h3,
-    .h3 {
-      ${theme.textStyle.title};
-      ${theme.textSize.h3};
-    }
-
-    h4,
-    .h4,
-    .lead {
-      ${theme.textStyle.lead};
-      ${theme.textSize.lead};
-    }
-
-    button {
-      ${theme.textStyle.ui}
-      ${theme.textSize.ui};
-    }
-
-    .caption {
-      ${theme.textStyle.caption};
-      ${theme.textSize.caption};
-    }
-  `;
-};
-
-const GlobalStyle = createGlobalStyle`
-  ${globalCss}
-`;
 
 export default App;

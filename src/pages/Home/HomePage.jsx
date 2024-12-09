@@ -3,7 +3,7 @@ import styled, { css, useTheme } from "styled-components";
 import { Link, Button, Switch, Select } from "../../components/ui";
 import { MoonIcon, SunIcon } from "../../components/Icons";
 import { useLocale } from "../../utils/localization/localization";
-import content from "./Home.content";
+import content from "./HomePage.content";
 const Illustration = content.illustration;
 
 // Component
@@ -58,7 +58,9 @@ const HomePage = () => {
 
       <div className="main-wrapper">
         <main>
-          <Illustration className="illustration" />
+          <div className="illustration-container">
+            <Illustration className="illustration" />
+          </div>
 
           <div className="usp">
             <div className="text-block">
@@ -102,7 +104,7 @@ const pageCss = ({ theme }) => css`
   width: 100%;
   height: 100%;
 
-  ${theme.mixin.flex("row", null, null, theme.space.s, theme.space.xl)}
+  ${theme.mixin.flex("row", null, null, theme.space.xl, theme.space.xl)}
 
   .select {
     width: 88px;
@@ -133,17 +135,26 @@ const pageCss = ({ theme }) => css`
   main {
     flex: 1 0 0;
     max-width: 480px;
-    margin-right: ${-theme.space.xl}px;
-    ${theme.mixin.flex("col", null, null, theme.space.l)}
+    ${theme.mixin.flex("col", null, null, theme.space.xl)}
   }
 
-  .illustration {
+  .illustration-container {
     flex: 1 0 0;
-    width: initial;
+    min-height: 0;
     max-width: 100%;
-    height: initial;
-    align-self: flex-start;
-    aspect-ratio: 1.272;
+
+    ${theme.mixin.flex(null, "center", "center")}
+
+    background: ${theme.color.blue.border};
+    border-radius: ${theme.size(0.6)}px;
+    border-bottom-right-radius: ${theme.size(4)}px;
+
+    .illustration {
+      aspect-ratio: 1.272;
+      max-width: 100%;
+      width: initial;
+      height: initial;
+    }
   }
 
   .text-block {

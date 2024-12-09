@@ -1,4 +1,4 @@
-import Illustration from "../../assets/illustrations/Illustration.svg?react";
+import Illustration from "../../assets/illustrations/OBJECTS.svg?react";
 
 const homePageContent = {
   illustration: Illustration,

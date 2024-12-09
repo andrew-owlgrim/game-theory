@@ -1,13 +1,13 @@
 import styled, { css } from "styled-components";
 import { wrapTextNodes } from "@/utils/common";
 import cfg from "./Select.cfg";
-import { Check } from "@/components/Icons";
+import { CheckIcon } from "../../Icons";
 
 const Option = ({ value, isActive, children, ...props }) => {
   return (
     <OptionContainer $active={isActive} {...props}>
       {wrapTextNodes(children)}
-      {isActive && <Check className="check" />}
+      {isActive && <CheckIcon className="check" />}
     </OptionContainer>
   );
 };

@@ -196,4 +196,58 @@ themeCfg.mixin.flex = (direction, align, justify, gap, padding) => css`
   ${padding || padding === 0 ? `padding: ${formatSpacing(padding)};` : ""}
 `;
 
+// scrollbar
+themeCfg.mixin.scrollbar = ({
+  width = 8,
+  track = "#ccc",
+  handle = "#000",
+  padding = 0,
+  margin,
+  round = false,
+}) => css`
+  ${margin &&
+  css`
+    padding-right: ${margin}px;
+    margin-right: ${-margin}px;
+  `}
+
+  /* width */
+  &::-webkit-scrollbar {
+    width: ${width}px;
+    border: ${padding}px solid transparent;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: ${track};
+    border: ${padding}px solid transparent;
+    background-clip: padding-box;
+    border-radius: ${round ? 666 : 0}px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: ${handle};
+    border: ${padding}px solid transparent;
+    background-clip: padding-box;
+    border-radius: ${round ? 666 : 0}px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${handle};
+    background-clip: padding-box;
+    border-width: ${padding > 0 ? padding - 1 : padding}px;
+  }
+`;
+
+themeCfg.mixin.hideScrollbar = css`
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+`;
+
 export default themeCfg;
