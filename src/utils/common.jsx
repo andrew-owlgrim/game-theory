@@ -6,6 +6,12 @@ export const random = (range) => {
   return Math.floor(Math.random() * range);
 };
 
+// Angle
+
+export function degreeToRad(degree) {
+  return (degree * Math.PI) / 180;
+}
+
 // Object Map
 
 export const objectMap = (obj, fn) =>

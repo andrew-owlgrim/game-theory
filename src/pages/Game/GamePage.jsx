@@ -1,5 +1,11 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import styled, { css } from "styled-components";
+import { useLocale } from "../../utils/localization/localization";
+import Game from "../../game/game";
+
+import Scoreboard from "../../components/parts/Scoreboard/Scoreboard";
 import { Button } from "../../components/ui";
 import {
   ArrowLeftTailIcon,
@@ -10,11 +16,9 @@ import {
   TrackNextFilledIcon,
   TrackPrevFilledIcon,
 } from "../../components/Icons";
-import { useLocale } from "../../utils/localization/localization";
+
 import content from "./GamePage.content";
-import { useEffect, useState } from "react";
-import Person from "../../game/person";
-import Scoreboard from "../../components/parts/Scoreboard/Scoreboard";
+import { drawPerson } from "../../game/drawer";
 
 // Component
 
@@ -26,12 +30,13 @@ const GamePage = () => {
   const [persons, setPersons] = useState([]);
 
   useEffect(() => {
-    const initialPersons = [];
-    for (let i = 0; i < 30; i++) {
-      const newPerson = new Person();
-      initialPersons.push(newPerson);
-    }
-    setPersons(initialPersons);
+    const game = new Game({ canvas: "#simulation-canvas", population: 30 });
+    game.start();
+    setPersons(game.population);
+
+    return () => {
+      game.finish();
+    };
   }, []);
 
   const handlePlayClick = () => {

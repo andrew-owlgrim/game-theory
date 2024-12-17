@@ -1,20 +1,27 @@
 import { random } from "@/utils/common";
 
-// Constantines
+// Semantics
 
-const myMove = 0;
-const hisMove = 1;
+const Move = {
+  my: 0,
+  his: 1,
+};
+
+const Decision = {
+  cooperate: true,
+  decieve: false,
+};
 
 // Class
 
 class Strategy {
-  constructor({ key, name, emoji, description, decisionFunc, color }) {
+  constructor({ key, name, emoji, description, decide, color } = {}) {
     this.key = key;
     this.name = name;
     this.emoji = emoji;
     this.color = color;
     this.description = description;
-    this.decisionFunc = decisionFunc;
+    this.decide = decide;
   }
 }
 
@@ -27,8 +34,8 @@ const strategies = [
     emoji: "😊",
     color: "pink",
     description: "Always cooperates no matter what",
-    decisionFunc: function () {
-      return true;
+    decide: function () {
+      return Decision.cooperate;
     },
   }),
 
@@ -38,8 +45,8 @@ const strategies = [
     emoji: "😈",
     color: "purple",
     description: "Always decieves",
-    decisionFunc: function () {
-      return false;
+    decide: function () {
+      return Decision.decieve;
     },
   }),
 
@@ -49,7 +56,7 @@ const strategies = [
     emoji: "🤪",
     color: "orange", //to do gradient
     description: "Makes decision radomly",
-    decisionFunc: function () {
+    decide: function () {
       return !!random(2);
     },
   }),
@@ -60,9 +67,9 @@ const strategies = [
     emoji: "🤨",
     color: "blue",
     description: "Always decieves",
-    decisionFunc: function (relations) {
-      if (relations.length === 0) return true;
-      else return relations[relations.length - 1][hisMove];
+    decide: function (interactions) {
+      if (interactions.length === 0) return true;
+      else return interactions[interactions.length - 1][Move.his];
     },
   }),
 ];
