@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled, { css } from "styled-components";
@@ -18,7 +18,6 @@ import {
 } from "../../components/Icons";
 
 import content from "./GamePage.content";
-import { drawPerson } from "../../game/drawer";
 
 // Component
 
@@ -29,13 +28,18 @@ const GamePage = () => {
   const [playing, setPlaying] = useState(false);
   const [persons, setPersons] = useState([]);
 
+  const canvasRef = useRef();
+
   useEffect(() => {
-    const game = new Game({ canvas: "#simulation-canvas", population: 30 });
-    game.start();
-    setPersons(game.population);
+    const gameCfg = {
+      population: 30,
+    };
+    const game = new Game({ canvas: canvasRef.current, cfg: gameCfg });
+    game.run();
+    setPersons(game.manager.getPersons());
 
     return () => {
-      game.finish();
+      game.clear();
     };
   }, []);
 
@@ -51,7 +55,7 @@ const GamePage = () => {
         </Button>
       </div>
       <main className="simulation-container">
-        <canvas id="simulation-canvas"></canvas>
+        <canvas id="simulation-canvas" ref={canvasRef}></canvas>
         <div className="margin bottom">
           <div className="player-controls">
             <Button variant="bare" round>

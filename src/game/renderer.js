@@ -25,11 +25,6 @@ export default class Renderer {
 
   // Camera
 
-  setCamera(center, scale) {
-    this.camera.position = center;
-    this.camera.scale = scale;
-  }
-
   applyCamera() {
     const { context } = this;
     const { position, scale } = this.camera;
@@ -44,6 +39,8 @@ export default class Renderer {
   resetCamera() {
     this.context.restore();
   }
+
+  // Render
 
   getEntitiesByLayer() {
     // Группируем сущности по слоям
@@ -63,14 +60,14 @@ export default class Renderer {
 
     // Рендерим каждую сущность, вызывая её метод render
     sortedEntities.forEach((entity) => {
-      if (entity.view && typeof entity.view.render === "function") {
+      if (typeof entity.render === "function") {
         const screenPosition = this.getScreenPosition(entity.position);
         const screenSize = this.getScreenSize(entity.size);
-        entity.view.render({
+        entity.render({
           context: this.context,
           position: screenPosition,
           size: screenSize,
-          rotation: entity.body?.angle || 0,
+          rotation: entity.rotation || 0,
           scale: this.camera.scale,
         });
       }
@@ -82,16 +79,18 @@ export default class Renderer {
   getScreenPosition(worldPosition) {
     const { position: cameraPosition, scale } = this.camera;
     return {
-      x: (worldPosition.x - cameraPosition.x) * scale + this.canvas.width / 2,
-      y: (worldPosition.y - cameraPosition.y) * scale + this.canvas.height / 2,
+      x: (worldPosition.x - cameraPosition.x) * scale,
+      y: (worldPosition.y - cameraPosition.y) * scale,
     };
   }
 
   getScreenSize(worldSize) {
-    return {
-      x: worldSize.x * this.camera.scale,
-      y: worldSize.y * this.camera.scale,
-    };
+    if (typeof worldSize === "number") return worldSize * this.camera.scale;
+    if (typeof worldSize === "object")
+      return {
+        x: worldSize.x * this.camera.scale,
+        y: worldSize.y * this.camera.scale,
+      };
   }
 
   // Loop
@@ -99,7 +98,7 @@ export default class Renderer {
   loop() {
     if (!this.isRunning) return; // Проверяем статус перед продолжением
     this.render();
-    this.animationFrameId = requestAnimationFrame(this.loop);
+    this.animationFrameId = requestAnimationFrame(this.loop.bind(this));
   }
 
   run() {
@@ -129,7 +128,7 @@ export default class Renderer {
 
   // Destroy
 
-  destroy() {
+  clear() {
     this.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();

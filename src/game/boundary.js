@@ -1,48 +1,37 @@
 import Entity from "./entity";
 import { Bodies, Composite } from "matter-js";
-import View from "./view";
-import { drawCircularBoundary } from "./drawer";
+
+// Entity
 
 export default class Boundary extends Entity {
-  constructor({ position = { x: 0, y: 0 }, radius = 100, segments = 24 } = {}) {
-    const body = createCircularBoundary(
+  constructor({
+    position = { x: 0, y: 0 },
+    size = 100,
+    segments = 24,
+    ...props
+  } = {}) {
+    super({ position, size, ...props });
+
+    this.layer = "boundaries";
+    this.composite = createCircularBoundary(
       position.x,
       position.y,
-      radius,
+      size / 2,
       segments
     );
+  }
 
-    const view = new View({
-      layer: "boundaries",
-      render: ({ scale, ...props }) => {
-        drawCircularBoundary({
-          ...props,
-          offset: -10 * scale,
-          color: "#ff0",
-        });
-      },
+  render({ size, scale, ...props }) {
+    const offset = 0;
+    drawCircularBoundary({
+      ...props,
+      size: size + offset * scale,
+      color: "#ff0",
     });
-
-    super({ body, view });
-  }
-
-  get bounds() {
-    return Composite.bounds(this.body);
-  }
-
-  get size() {
-    const bounds = this.bounds;
-    return { x: bounds.max.x - bounds.min.x, y: bounds.max.y - bounds.min.y };
-  }
-
-  get position() {
-    const bounds = this.bounds;
-    return {
-      x: (bounds.min.x + bounds.max.x) / 2,
-      y: (bounds.min.y + bounds.max.y) / 2,
-    };
   }
 }
+
+// Body
 
 function createCircularBoundary(cx, cy, radius, segments) {
   const angleStep = (2 * Math.PI) / segments;
@@ -55,21 +44,45 @@ function createCircularBoundary(cx, cy, radius, segments) {
     const nextX = cx + radius * Math.cos(angle + angleStep);
     const nextY = cy + radius * Math.sin(angle + angleStep);
 
-    const wall = Bodies.rectangle(
+    const wall = Bodies.trapezoid(
       (x + nextX) / 2, // Центр сегмента
       (y + nextY) / 2,
       Math.sqrt((nextX - x) ** 2 + (nextY - y) ** 2), // Длина сегмента
       10, // Толщина стенки
+      0.9,
       {
         isStatic: true,
-        angle: Math.atan2(nextY - y, nextX - x),
+        angle: Math.atan2(nextY - y, nextX - x) + Math.PI,
         restitution: 1,
         friction: 0,
-        render: { fillStyle: "blue" },
+        frictionStatic: 0,
       }
     );
     Composite.add(composite, wall);
   }
 
   return composite;
+}
+
+// Drawer
+
+function drawCircularBoundary({
+  context,
+  position,
+  size,
+  color = "black",
+  lineWidth = 1,
+}) {
+  context.save();
+
+  context.translate(position.x, position.y);
+
+  context.strokeStyle = color;
+  context.lineWidth = lineWidth;
+
+  context.beginPath();
+  context.arc(0, 0, size / 2, 0, Math.PI * 2);
+  context.stroke();
+
+  context.restore();
 }
