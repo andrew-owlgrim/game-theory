@@ -3,17 +3,16 @@ export default class Renderer {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
 
-    this.entities = entities; // Объект с игровыми сущностями
-    this.layers = layers; // Массив слоёв, которые нужно отрендерить
-    this.camera = camera; // Ссылка на камеру
+    this.entities = entities;
+    this.layers = layers;
+    this.camera = camera;
 
-    this.isRunning = false; // Статус рендера
-    this.animationFrameId = null; // ID текущего requestAnimationFrame
+    this.isRunning = false;
+    this.animationFrameId = null;
 
-    // Resize observer для слежения за изменением размеров canvas
     this.resizeObserver = new ResizeObserver(() => this.resizeCanvas());
     this.resizeObserver.observe(this.canvas);
-    this.resizeCanvas(); // Устанавливаем начальные размеры
+    this.resizeCanvas();
   }
 
   // Clear
@@ -43,54 +42,37 @@ export default class Renderer {
   // Render
 
   getEntitiesByLayer() {
-    // Группируем сущности по слоям
     return this.layers.flatMap((layer) =>
       this.entities.filter((entity) => entity.layer === layer)
     );
   }
 
-  // Render
-
   render() {
     this.clearCanvas();
     this.applyCamera();
 
-    // Получаем сущности, отсортированные по слоям
     const sortedEntities = this.getEntitiesByLayer();
 
-    // Рендерим каждую сущность, вызывая её метод render
     sortedEntities.forEach((entity) => {
       if (typeof entity.render === "function") {
-        const screenPosition = this.getScreenPosition(entity.position);
-        const screenSize = this.getScreenSize(entity.size);
         entity.render({
           context: this.context,
-          position: screenPosition,
-          size: screenSize,
-          rotation: entity.rotation || 0,
+          position: entity.getPosition(),
+          size: entity.getSize(),
+          rotation: entity.getRotation() || 0,
           scale: this.camera.scale,
+        });
+      }
+      if (typeof entity.render === "object") {
+        renderBody({
+          context: this.context,
+          body: entity.body,
+          ...entity.render,
         });
       }
     });
 
     this.resetCamera();
-  }
-
-  getScreenPosition(worldPosition) {
-    const { position: cameraPosition, scale } = this.camera;
-    return {
-      x: (worldPosition.x - cameraPosition.x) * scale,
-      y: (worldPosition.y - cameraPosition.y) * scale,
-    };
-  }
-
-  getScreenSize(worldSize) {
-    if (typeof worldSize === "number") return worldSize * this.camera.scale;
-    if (typeof worldSize === "object")
-      return {
-        x: worldSize.x * this.camera.scale,
-        y: worldSize.y * this.camera.scale,
-      };
   }
 
   // Loop
@@ -121,18 +103,64 @@ export default class Renderer {
     const { canvas } = this;
     const { width, height } = canvas.getBoundingClientRect();
 
-    // Устанавливаем фактические размеры canvas
     canvas.width = Math.floor(width);
     canvas.height = Math.floor(height);
   }
 
   // Destroy
 
-  clear() {
+  destroy() {
     this.stop();
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
       this.resizeObserver = null;
     }
   }
+}
+
+/**
+ * Рендерит физическое тело на канвасе.
+ * @param {CanvasRenderingContext2D} context - Контекст канваса для рисования.
+ * @param {Body} body - Физическое тело Matter.js.
+ * @param {string} fillStyle - Цвет заливки.
+ * @param {string} strokeStyle - Цвет обводки.
+ * @param {number} lineWidth - Ширина линии.
+ */
+function renderBody({
+  context,
+  body,
+  fillStyle,
+  strokeStyle,
+  lineWidth = 1,
+} = {}) {
+  const { vertices } = body;
+
+  context.save();
+  context.beginPath();
+
+  // Перемещаемся к первой вершине
+  const firstVertex = vertices[0];
+  context.moveTo(firstVertex.x, firstVertex.y);
+
+  // Проходим через остальные вершины
+  for (let i = 1; i < vertices.length; i++) {
+    const vertex = vertices[i];
+    context.lineTo(vertex.x, vertex.y);
+  }
+
+  // Замыкаем фигуру
+  context.closePath();
+
+  // Заливаем и обводим
+  if (fillStyle) {
+    context.fillStyle = fillStyle;
+    context.fill();
+  }
+  if (strokeStyle) {
+    context.strokeStyle = strokeStyle;
+    context.lineWidth = lineWidth;
+    context.stroke();
+  }
+
+  context.restore();
 }

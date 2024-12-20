@@ -11,8 +11,8 @@ export default class Entity {
     this.id = ID.generate();
     this.body = body;
 
-    this._position = position;
-    this._rotation = rotation;
+    this.position = position;
+    this.rotation = rotation;
 
     this.size = size;
     this.visible = true;
@@ -20,33 +20,21 @@ export default class Entity {
     this.layer = layer;
   }
 
-  // Геттер и сеттер для позиции
-  get position() {
+  getPosition() {
     if (this.body) return this.body.position;
-    return this._position;
+    else return this.position;
   }
 
-  set position(newPosition) {
-    if (this.body) {
-      // Обновление позиции тела, если оно связано с физическим движком
-      Matter.Body.setPosition(this.body, newPosition);
-    } else {
-      this._position = newPosition;
-    }
+  getSize() {
+    return this.size;
   }
 
-  // Геттер и сеттер для угла
-  get rotation() {
+  getRotation() {
     if (this.body) return this.body.angle;
-    return this._rotation;
+    return this.rotation;
   }
 
-  set rotation(newRotation) {
-    if (this.body) {
-      // Обновление угла тела
-      Matter.Body.setAngle(this.body, newRotation);
-    } else {
-      this._rotation = newRotation;
-    }
+  render() {
+    throw new Error("render() must be implemented by subclasses.");
   }
 }

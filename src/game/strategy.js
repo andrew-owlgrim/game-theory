@@ -1,22 +1,21 @@
-import { random } from "@/utils/common";
+import { random, randomWeighted } from "@/utils/common";
 
 // Semantics
 
-const Move = {
+const MOVE = {
   my: 0,
   his: 1,
 };
 
-const Decision = {
+const DECISION = {
   cooperate: true,
-  decieve: false,
+  deceive: false,
 };
 
 // Class
 
 class Strategy {
-  constructor({ key, name, emoji, description, decide, color } = {}) {
-    this.key = key;
+  constructor({ name, emoji, description, decide, color } = {}) {
     this.name = name;
     this.emoji = emoji;
     this.color = color;
@@ -27,31 +26,28 @@ class Strategy {
 
 // Strategies
 
-const strategies = [
-  new Strategy({
-    key: "kind",
+const strategies = {
+  kind: new Strategy({
     name: { en: "Kind" },
     emoji: "😊",
     color: "pink",
     description: "Always cooperates no matter what",
     decide: function () {
-      return Decision.cooperate;
+      return DECISION.cooperate;
     },
   }),
 
-  new Strategy({
-    key: "villian",
-    name: { en: "Villian", ua: "Негідник", ru: "Злодей" },
+  villain: new Strategy({
+    name: { en: "Villain", ua: "Негідник", ru: "Злодей" },
     emoji: "😈",
     color: "purple",
     description: "Always decieves",
     decide: function () {
-      return Decision.decieve;
+      return DECISION.deceive;
     },
   }),
 
-  new Strategy({
-    key: "random",
+  random: new Strategy({
     name: { en: "Trickster" },
     emoji: "🤪",
     color: "orange", //to do gradient
@@ -61,25 +57,36 @@ const strategies = [
     },
   }),
 
-  new Strategy({
-    key: "imitator",
+  imitator: new Strategy({
     name: { en: "Mimicker", ua: "Імітатор", ru: "Подражатель" },
     emoji: "🤨",
     color: "blue",
     description: "Always decieves",
     decide: function (interactions) {
       if (interactions.length === 0) return true;
-      else return interactions[interactions.length - 1][Move.his];
+      else return interactions[interactions.length - 1][MOVE.his];
     },
   }),
-];
+};
 
 // Random strategy
 
 function getRandomStrategy() {
-  return strategies[random(strategies.length)];
+  const values = Object.values(strategies);
+  return values[random(values.length)];
+}
+
+function getRandomWeightedStrategy(distribution) {
+  const randomStrategy = randomWeighted(distribution);
+  return strategies[randomStrategy];
 }
 
 //
 
-export { strategies, getRandomStrategy };
+export {
+  strategies,
+  getRandomStrategy,
+  getRandomWeightedStrategy,
+  DECISION,
+  MOVE,
+};

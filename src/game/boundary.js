@@ -19,6 +19,8 @@ export default class Boundary extends Entity {
       size / 2,
       segments
     );
+
+    // this.render = { stroke: "#fff4" };
   }
 
   render({ size, scale, ...props }) {
@@ -36,6 +38,7 @@ export default class Boundary extends Entity {
 function createCircularBoundary(cx, cy, radius, segments) {
   const angleStep = (2 * Math.PI) / segments;
   const composite = Composite.create();
+  // const walls = [];
 
   for (let i = 0; i < segments; i++) {
     const angle = i * angleStep;
@@ -59,6 +62,7 @@ function createCircularBoundary(cx, cy, radius, segments) {
       }
     );
     Composite.add(composite, wall);
+    // walls.push(wall);
   }
 
   return composite;

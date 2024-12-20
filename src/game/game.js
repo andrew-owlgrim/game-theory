@@ -47,10 +47,20 @@ export default class Game {
     this.render.stop();
   }
 
-  clear() {
+  speedUp() {
+    const newSpeed = this.engine.timing.timeScale * 2;
+    if (newSpeed < this.cfg.maxSpeed) this.engine.timing.timeScale = newSpeed;
+  }
+
+  slowDown() {
+    const newSpeed = this.engine.timing.timeScale / 2;
+    if (newSpeed > this.cfg.minSpeed) this.engine.timing.timeScale = newSpeed;
+  }
+
+  destroy() {
     this.stop();
     Matter.Engine.clear(this.engine);
-    this.render.clear();
+    this.render.destroy();
   }
 
   // Time

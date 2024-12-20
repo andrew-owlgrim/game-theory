@@ -2,9 +2,23 @@ import React from "react";
 
 // Random
 
-export const random = (range) => {
-  return Math.floor(Math.random() * range);
-};
+export function random(amount) {
+  return Math.floor(Math.random() * amount);
+}
+
+export function randomWeighted(distribution) {
+  const entries = Object.entries(distribution);
+  const totalWeight = entries.reduce((sum, [, weight]) => sum + weight, 0);
+  const random = Math.random() * totalWeight;
+
+  let cumulativeWeight = 0;
+  for (const [element, weight] of entries) {
+    cumulativeWeight += weight;
+    if (random < cumulativeWeight) {
+      return element;
+    }
+  }
+}
 
 // Angle
 

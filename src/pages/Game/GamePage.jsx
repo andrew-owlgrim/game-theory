@@ -18,6 +18,7 @@ import {
 } from "../../components/Icons";
 
 import content from "./GamePage.content";
+import { Events } from "matter-js";
 
 // Component
 
@@ -27,23 +28,37 @@ const GamePage = () => {
 
   const [playing, setPlaying] = useState(false);
   const [persons, setPersons] = useState([]);
+  const [game, setGame] = useState(null);
 
   const canvasRef = useRef();
 
   useEffect(() => {
-    const gameCfg = {
-      population: 30,
-    };
+    const gameCfg = {};
     const game = new Game({ canvas: canvasRef.current, cfg: gameCfg });
+    setGame(game);
+
     game.run();
+    setPlaying(true);
     setPersons(game.manager.getPersons());
 
+    const handlePersonsUpdate = ({ persons }) => {
+      setPersons(
+        // persons
+        persons.toSorted((personA, personB) => personB.score - personA.score)
+      );
+    };
+
+    Events.on(game.manager, "updatePersons", handlePersonsUpdate);
+
     return () => {
-      game.clear();
+      Events.off(game.manager, "updatePersons", handlePersonsUpdate);
+      game.destroy();
     };
   }, []);
 
   const handlePlayClick = () => {
+    if (playing) game.stop();
+    else game.run();
     setPlaying(!playing);
   };
 
@@ -59,7 +74,7 @@ const GamePage = () => {
         <div className="margin bottom">
           <div className="player-controls">
             <Button variant="bare" round>
-              <TrackPrevFilledIcon />
+              <TrackPrevFilledIcon onClick={() => game.slowDown()} />
             </Button>
             <Button variant="bare" round>
               <SkipBackFilledIcon />
@@ -71,7 +86,7 @@ const GamePage = () => {
               <SkipForwardFilledIcon />
             </Button>
             <Button variant="bare" round>
-              <TrackNextFilledIcon />
+              <TrackNextFilledIcon onClick={() => game.speedUp()} />
             </Button>
           </div>
         </div>

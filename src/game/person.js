@@ -18,23 +18,29 @@ export default class Person extends Entity {
     super({ size, ...props });
 
     this.body = createPersonBody(position, size);
+    this.body.person = this;
     this.layer = "persons";
 
     this.name = name;
     this.strategy = strategy;
     this.score = score;
+    this.totalInteractions = 0;
 
     this.interactions = {};
     this.memory = {};
   }
 
   decide(person) {
-    this.strategy.decide(this.interactions[person.id] || [], this.memory);
+    return this.strategy.decide(
+      this.interactions[person.id] || [],
+      this.memory
+    );
   }
 
   addInteraction(person, myMove, hisMove) {
     if (!this.interactions[person.id]) this.interactions[person.id] = [];
     this.interactions[person.id].push([myMove, hisMove]);
+    this.totalInteractions++;
   }
 
   render(props) {
@@ -52,6 +58,7 @@ export default class Person extends Entity {
 
 function createPersonBody(position, size) {
   return Bodies.circle(position.x, position.y, size / 2, {
+    label: "personBody",
     restitution: 1,
     friction: 0,
     frictionStatic: 0,
