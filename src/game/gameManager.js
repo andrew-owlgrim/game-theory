@@ -8,6 +8,7 @@ import {
   createObjectsInCircle,
 } from "./gameUtils";
 import Wall from "./wall";
+import DeathAnimation from "./deathAnimation";
 
 export default class GameManager {
   constructor({ engine, entities, camera, cfg }) {
@@ -21,6 +22,7 @@ export default class GameManager {
     this.entropyApplied = false;
 
     this.persons = [];
+    this.effects = [];
 
     this.init();
   }
@@ -55,6 +57,9 @@ export default class GameManager {
     let personsChanged = false;
     const persons = this.getPersons();
 
+    // Update State
+    this.persons.forEach((person) => person.updateState());
+
     // Interactions
     if (this.toInteract.length > 0) {
       while (this.toInteract.length > 0) {
@@ -82,7 +87,7 @@ export default class GameManager {
 
     // Death
     if (this.cfg.death) personsChanged = this.applyDeath(personsChanged);
-    console.log(this.persons[0].name, this.persons[0].totalInteractions);
+    // console.log(this.persons[0].name, this.persons[0].totalInteractions);
 
     // Update event
     if (personsChanged)
@@ -92,6 +97,20 @@ export default class GameManager {
   }
 
   // Entities
+
+  createEDeathffect(person) {
+    const effect = new DeathAnimation(person);
+    this.entities.push(effect);
+    this.effects.push(effect);
+  }
+
+  removeDeathEffect(effect) {
+    const index = this.entities.indexOf(effect);
+    if (index !== -1) {
+      this.entities.splice(index, 1); // Удаляем объект из текущего массива
+    }
+    this.effects = this.effects.filter((item) => item !== effect);
+  }
 
   createPerson() {
     const person = new Person({
@@ -122,6 +141,9 @@ export default class GameManager {
     if (person.body) {
       Matter.Composite.remove(this.engine.world, person.body);
     }
+
+    // To Clean
+    this.createEDeathffect(person);
   }
 
   getPersons() {
@@ -169,9 +191,18 @@ export default class GameManager {
     personA.score += payoffA;
     personB.score += payoffB;
 
+    this.personStateAnimation(personA, payoffA);
+    this.personStateAnimation(personB, payoffB);
+
     // console.log(
     //   `${personA.name} (${decisionA}) vs ${personB.name} (${decisionB}): ${payoffA} / ${payoffB}`
     // );
+  }
+
+  personStateAnimation(person, payoff) {
+    if (payoff > 0) person.setState("happy");
+    else if (payoff < 0) person.setState("upset");
+    else person.setState("neutral");
   }
 
   applyEntropy() {

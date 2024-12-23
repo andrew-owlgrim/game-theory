@@ -1,5 +1,5 @@
 const gameCfg = {
-  layers: ["boundaries", "persons", "effects"],
+  layers: ["boundaries", "bgEffects", "persons", "effects"],
   minSpeed: 0.1,
   maxSpeed: 10,
 
@@ -8,20 +8,20 @@ const gameCfg = {
 
   room: 5,
   boundarySize: 550,
-  personSize: 40,
-  population: 10,
+  personSize: 30,
+  population: 20,
   initialScore: 25,
 
   death: true,
-  lifespan: 200,
+  lifespan: 20,
 
   payoffs: {
     true: {
       true: [2, 2],
-      false: [-1, 3],
+      false: [-2, 3],
     },
     false: {
-      true: [3, -1],
+      true: [3, -2],
       false: [-1, -1],
     },
   },
@@ -31,11 +31,14 @@ const gameCfg = {
   entropyValue: -10,
 
   distribution: {
-    kind: 1,
-    villain: 1,
-    imitator: 1,
-    random: 0,
+    kind: 3,
+    villain: 3,
+    imitator: 3,
+    random: 1,
   },
+
+  stateAnimationDuration: 400,
+  deathAnimationDuration: 2000,
 };
 
 export default gameCfg;

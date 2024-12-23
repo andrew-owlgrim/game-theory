@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import styled, { css } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { useLocale } from "../../utils/localization/localization";
 import Game from "../../game/game";
 
@@ -32,8 +32,12 @@ const GamePage = () => {
 
   const canvasRef = useRef();
 
+  const theme = useTheme();
+
   useEffect(() => {
-    const gameCfg = {};
+    const gameCfg = {
+      colors: theme.color,
+    };
     const game = new Game({ canvas: canvasRef.current, cfg: gameCfg });
     setGame(game);
 
@@ -139,7 +143,7 @@ const pageCss = ({ theme }) => css`
   #simulation-canvas {
     width: 100%;
     height: 100%;
-    background: ${theme.color.main.primary};
+    background: ${theme.color.blueBlack.main};
     border-radius: ${theme.size(0.6)}px;
   }
 

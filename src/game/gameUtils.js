@@ -1,4 +1,13 @@
-export function getRandomPosition(centerX, centerY, radius) {
+// Constants
+
+const categories = {
+  walls: 0x0001,
+  persons: 0x0002,
+};
+
+// Functions
+
+function getRandomPosition(centerX, centerY, radius) {
   const theta = Math.random() * 2 * Math.PI; // Случайный угол
   const r = Math.sqrt(Math.random()) * radius; // Радиус с учётом равномерного распределения
   const x = centerX + r * Math.cos(theta);
@@ -6,14 +15,14 @@ export function getRandomPosition(centerX, centerY, radius) {
   return { x, y };
 }
 
-export function getRandomVelocity(speed) {
+function getRandomVelocity(speed) {
   const theta = Math.random() * 2 * Math.PI; // Случайный угол
   const vx = speed * Math.cos(theta);
   const vy = speed * Math.sin(theta);
   return { vx, vy };
 }
 
-export function createObjectsInCircle(cx, cy, radius, segments, callback) {
+function createObjectsInCircle(cx, cy, radius, segments, callback) {
   const angleStep = (2 * Math.PI) / segments;
   const objects = [];
 
@@ -35,3 +44,12 @@ export function createObjectsInCircle(cx, cy, radius, segments, callback) {
 
   return objects;
 }
+
+//
+
+export {
+  categories,
+  getRandomPosition,
+  getRandomPosition,
+  createObjectsInCircle,
+};

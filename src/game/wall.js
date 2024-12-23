@@ -1,5 +1,6 @@
 import { Bodies, Body } from "matter-js";
 import Entity from "./entity";
+import { categories } from "./gameUtils";
 
 // Entity
 
@@ -30,9 +31,14 @@ export default class Wall extends Entity {
 function createWallBody({ position, size, rotation = 0, shape = "rectangle" }) {
   const baseOptions = {
     isStatic: true,
+
     restitution: 1,
     friction: 0,
     frictionStatic: 0,
+
+    collisionFilter: {
+      category: categories.walls,
+    },
   };
 
   let body;

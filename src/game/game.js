@@ -3,6 +3,7 @@ import GameManager from "./gameManager";
 import Renderer from "./renderer";
 import Camera from "./camera";
 import defaultCfg from "./cfg";
+import gameContext from "./context";
 
 export default class Game {
   constructor({ canvas, cfg = {} }) {
@@ -21,6 +22,7 @@ export default class Game {
       camera: this.camera,
       layers: this.cfg.layers,
     });
+    Object.assign(gameContext, { cfg: this.cfg, engine: this.engine });
     // this.render = Render.create({
     //   canvas,
     //   engine: this.engine,
