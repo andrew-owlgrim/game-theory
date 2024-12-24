@@ -50,6 +50,6 @@ function createObjectsInCircle(cx, cy, radius, segments, callback) {
 export {
   categories,
   getRandomPosition,
-  getRandomPosition,
+  getRandomVelocity,
   createObjectsInCircle,
 };

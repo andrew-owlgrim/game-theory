@@ -59,6 +59,10 @@ export default class GameManager {
 
     // Update State
     this.persons.forEach((person) => person.updateState());
+    this.effects.forEach((effect) => {
+      effect.update();
+      if (effect.ended) this.removeDeathEffect(effect);
+    });
 
     // Interactions
     if (this.toInteract.length > 0) {

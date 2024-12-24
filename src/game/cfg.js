@@ -12,17 +12,17 @@ const gameCfg = {
   population: 20,
   initialScore: 25,
 
-  death: true,
-  lifespan: 20,
+  death: false,
+  lifespan: 200,
 
   payoffs: {
     true: {
-      true: [2, 2],
-      false: [-2, 3],
+      true: [3, 3],
+      false: [0, 4],
     },
     false: {
-      true: [3, -2],
-      false: [-1, -1],
+      true: [4, 0],
+      false: [0, 0],
     },
   },
 
@@ -34,11 +34,11 @@ const gameCfg = {
     kind: 3,
     villain: 3,
     imitator: 3,
-    random: 1,
+    random: 0,
   },
 
   stateAnimationDuration: 400,
-  deathAnimationDuration: 2000,
+  deathAnimationDuration: 1000,
 };
 
 export default gameCfg;

@@ -106,7 +106,7 @@ export default class Person extends Entity {
     const { stateAnimationDuration: duration } = gameContext.cfg;
     const { timestamp } = gameContext.engine.timing;
     const opacity =
-      this.person.state === "dead"
+      this.state === "dead"
         ? (this.animationEndTime - timestamp) / duration
         : 1;
 
@@ -140,7 +140,7 @@ function createPersonBody(position, size) {
 
 // Drawer
 
-function drawPerson({
+export function drawPerson({
   context,
   position,
   rotation,

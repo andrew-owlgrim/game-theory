@@ -63,7 +63,7 @@ const strategies = {
     color: "blue",
     description: "Always decieves",
     decide: function (interactions) {
-      if (interactions.length === 0) return true;
+      if (interactions.length === 0) return DECISION.cooperate;
       else return interactions[interactions.length - 1][MOVE.his];
     },
   }),
