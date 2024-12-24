@@ -1,6 +1,6 @@
 import { Bodies, Body } from "matter-js";
-import Entity from "./entity";
-import { categories } from "./gameUtils";
+import Entity from "../core/entity";
+import { BODY_CATEGORY } from "../utils/constants";
 
 // Entity
 
@@ -37,7 +37,7 @@ function createWallBody({ position, size, rotation = 0, shape = "rectangle" }) {
     frictionStatic: 0,
 
     collisionFilter: {
-      category: categories.walls,
+      category: BODY_CATEGORY.walls,
     },
   };
 

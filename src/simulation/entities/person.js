@@ -1,10 +1,10 @@
 import { Bodies, Body } from "matter-js";
-import Entity from "./entity";
+import Entity from "../core/entity";
 
-import getRandomName from "./names";
-import { getRandomStrategy } from "./strategy";
-import gameContext from "./context";
-import { categories } from "./gameUtils";
+import getRandomName from "../utils/names";
+import { getRandomStrategy } from "../utils/strategy";
+import gameContext from "../core/context";
+import { BODY_CATEGORY } from "../utils/constants";
 
 // Entity
 
@@ -15,7 +15,6 @@ export default class Person extends Entity {
       happy: "😃",
       upset: "☹",
       neutral: "😐",
-      dying: "💀",
       dead: "💀",
     };
     return emojis[person.state];
@@ -68,16 +67,16 @@ export default class Person extends Entity {
   }
 
   resetState() {
-    this.state = this.state === "dying" ? "dead" : "default";
+    this.state = "default";
     this.animationEndTime = null;
   }
 
   die() {
-    this.setState("dying");
+    this.setState("dead");
     Body.set(this.body, {
       collisionFilter: {
         ...this.body.collisionFilter,
-        mask: categories.walls,
+        mask: BODY_CATEGORY.walls,
       },
     });
   }
@@ -133,7 +132,7 @@ function createPersonBody(position, size) {
     density: 0.1,
 
     collisionFilter: {
-      category: categories.persons,
+      category: BODY_CATEGORY.persons,
     },
   });
 }

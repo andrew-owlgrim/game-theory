@@ -195,9 +195,3 @@ const surnames = [
   "Barnes",
   "Fisher",
 ];
-
-export default function getRandomName() {
-  const randomName = names[Math.floor(Math.random() * names.length)];
-  const randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
-  return `${randomName} ${randomSurname}`;
-}

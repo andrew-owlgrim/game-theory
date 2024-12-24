@@ -1,28 +1,22 @@
 import Matter, { Body, Composite, Events } from "matter-js";
-import Boundary from "./boundary";
-import Person from "./person";
-import { getRandomWeightedStrategy } from "./strategy";
+import Person from "./entities/person";
+import { getRandomWeightedStrategy } from "./utils/strategy";
 import {
   getRandomVelocity,
   getRandomPosition,
   createObjectsInCircle,
-} from "./gameUtils";
-import Wall from "./wall";
-import DeathAnimation from "./deathAnimation";
+} from "./utils/constants";
+import Wall from "./entities/wall";
+import DeathAnimation from "../deathAnimation";
+import Game from "./core/game";
 
-export default class GameManager {
-  constructor({ engine, entities, camera, cfg }) {
-    this.engine = engine;
-    this.entities = entities;
-    this.camera = camera;
-    this.cfg = cfg;
+export default class Simulation extends Game {
+  constructor(props) {
+    super(props);
 
-    this.toInteract = [];
     this.totalInteractions = 0;
+    this.toInteract = [];
     this.entropyApplied = false;
-
-    this.persons = [];
-    this.effects = [];
 
     this.init();
   }
@@ -97,20 +91,6 @@ export default class GameManager {
   }
 
   // Entities
-
-  createEDeathffect(person) {
-    const effect = new DeathAnimation(person);
-    this.entities.push(effect);
-    this.effects.push(effect);
-  }
-
-  removeDeathEffect(effect) {
-    const index = this.entities.indexOf(effect);
-    if (index !== -1) {
-      this.entities.splice(index, 1); // Удаляем объект из текущего массива
-    }
-    this.effects = this.effects.filter((item) => item !== effect);
-  }
 
   createPerson() {
     const person = new Person({
@@ -216,67 +196,5 @@ export default class GameManager {
         this.entropyApplied = true;
       }
     } else this.entropyApplied = false;
-  }
-
-  applyDeath(personsChanged) {
-    this.persons.forEach((person) => {
-      if (person.totalInteractions >= this.cfg.lifespan) {
-        this.removePerson(person);
-        this.createPerson();
-        this.personsChanged = true;
-      }
-    });
-    return personsChanged;
-  }
-
-  //Physics
-
-  applySpeedCorrection() {
-    this.entities.forEach((entity) => {
-      if (entity instanceof Person) {
-        const body = entity.body;
-        const currentSpeed = Body.getSpeed(body);
-        const deltaSpeed = currentSpeed - this.cfg.moveSpeed;
-
-        // Если отклонение достаточно велико, корректируем скорость
-        if (deltaSpeed > 0.1) {
-          Body.setSpeed(body, currentSpeed - this.cfg.msCorrectionForce / 60);
-        } else if (deltaSpeed < 0.1) {
-          Body.setSpeed(body, currentSpeed + this.cfg.msCorrectionForce / 60);
-        }
-      }
-    });
-  }
-
-  applyAttractor() {
-    if (this.boundary) {
-      const center = {
-        x: this.boundary.position.x,
-        y: this.boundary.position.y,
-      }; // Центр поля
-      const maxDistance = this.boundary.size / 2; // Радиус круга (границы)
-
-      const persons = this.getPersons();
-
-      persons.forEach((person) => {
-        // Вычисляем вектор от объекта к центру
-        const direction = Matter.Vector.sub(center, person.body.position);
-        const distance = Matter.Vector.magnitude(direction);
-
-        if (distance > 0) {
-          // Нормализуем вектор направления
-          const normalizedDirection = Matter.Vector.normalise(direction);
-
-          // Рассчитываем силу на основе расстояния
-          const strength = 0.005 * (distance / maxDistance); // Пропорционально удалению
-
-          // Применяем силу к объекту
-          Matter.Body.applyForce(person.body, person.body.position, {
-            x: normalizedDirection.x * strength,
-            y: normalizedDirection.y * strength,
-          });
-        }
-      });
-    }
   }
 }

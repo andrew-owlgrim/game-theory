@@ -1,10 +1,9 @@
 export default class Renderer {
-  constructor({ canvas, entities, layers = [], camera }) {
+  constructor({ canvas, entities, camera }) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
 
     this.entities = entities;
-    this.layers = layers;
     this.camera = camera;
 
     this.isRunning = false;
@@ -18,8 +17,7 @@ export default class Renderer {
   // Clear
 
   clearCanvas() {
-    const { context, canvas } = this;
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   // Camera
@@ -41,19 +39,13 @@ export default class Renderer {
 
   // Render
 
-  getEntitiesByLayer() {
-    return this.layers.flatMap((layer) =>
-      this.entities.filter((entity) => entity.layer === layer)
-    );
-  }
-
   render() {
     this.clearCanvas();
     this.applyCamera();
 
-    const sortedEntities = this.getEntitiesByLayer();
+    const entities = this.entities.getAll();
 
-    sortedEntities.forEach((entity) => {
+    entities.forEach((entity) => {
       if (typeof entity.render === "function") {
         entity.render({
           context: this.context,
@@ -118,14 +110,8 @@ export default class Renderer {
   }
 }
 
-/**
- * Рендерит физическое тело на канвасе.
- * @param {CanvasRenderingContext2D} context - Контекст канваса для рисования.
- * @param {Body} body - Физическое тело Matter.js.
- * @param {string} fillStyle - Цвет заливки.
- * @param {string} strokeStyle - Цвет обводки.
- * @param {number} lineWidth - Ширина линии.
- */
+// General drawer
+
 function renderBody({
   context,
   body,

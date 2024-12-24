@@ -1,17 +1,5 @@
 import { random, randomWeighted } from "@/utils/common";
 
-// Semantics
-
-const MOVE = {
-  my: 0,
-  his: 1,
-};
-
-const DECISION = {
-  cooperate: true,
-  deceive: false,
-};
-
 // Class
 
 class Strategy {
@@ -41,7 +29,7 @@ const strategies = {
     name: { en: "Villain", ua: "Негідник", ru: "Злодей" },
     emoji: "😈",
     color: "purple",
-    description: "Always decieves",
+    description: "Always decieves no matter what",
     decide: function () {
       return DECISION.deceive;
     },
@@ -61,7 +49,7 @@ const strategies = {
     name: { en: "Mimicker", ua: "Імітатор", ru: "Подражатель" },
     emoji: "🤨",
     color: "blue",
-    description: "Always decieves",
+    description: "First time he cooperates. Then repeats last oppenents move",
     decide: function (interactions) {
       if (interactions.length === 0) return true;
       else return interactions[interactions.length - 1][MOVE.his];
