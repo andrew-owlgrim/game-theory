@@ -1,7 +1,7 @@
 import { Bodies, Body } from "matter-js";
 import Entity from "../core/entity";
 
-import getRandomName from "../utils/names";
+import { getRandomName } from "../utils/names";
 import { getRandomStrategy } from "../utils/strategy";
 import gameContext from "../core/context";
 import { BODY_CATEGORY } from "../utils/constants";

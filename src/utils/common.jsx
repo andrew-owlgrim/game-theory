@@ -6,18 +6,22 @@ export function random(amount) {
   return Math.floor(Math.random() * amount);
 }
 
-export function randomWeighted(distribution) {
-  const entries = Object.entries(distribution);
+export function randomWeightedItem(items, weights) {
+  const entries = Object.entries(weights);
   const totalWeight = entries.reduce((sum, [, weight]) => sum + weight, 0);
   const random = Math.random() * totalWeight;
 
   let cumulativeWeight = 0;
-  for (const [element, weight] of entries) {
+  for (const [key, weight] of entries) {
     cumulativeWeight += weight;
     if (random < cumulativeWeight) {
-      return element;
+      return items[key];
     }
   }
+}
+
+export function randomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
 }
 
 // Angle

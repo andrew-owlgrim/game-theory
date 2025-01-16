@@ -13,9 +13,9 @@ export function getRandomVelocity(speed) {
   return { vx, vy };
 }
 
-export function createObjectsInCircle(cx, cy, radius, segments, callback) {
+export function getCircleLayout(cx, cy, radius, segments) {
   const angleStep = (2 * Math.PI) / segments;
-  const objects = [];
+  const objectParams = [];
 
   for (let i = 0; i < segments; i++) {
     const angle = i * angleStep;
@@ -24,14 +24,12 @@ export function createObjectsInCircle(cx, cy, radius, segments, callback) {
     const nextX = cx + radius * Math.cos(angle + angleStep);
     const nextY = cy + radius * Math.sin(angle + angleStep);
 
-    const object = callback({
+    objectParams.push({
       position: { x: (x + nextX) / 2, y: (y + nextY) / 2 },
       size: { x: Math.sqrt((nextX - x) ** 2 + (nextY - y) ** 2), y: 10 },
       rotation: Math.atan2(nextY - y, nextX - x) + Math.PI,
     });
-
-    objects.push(object);
   }
 
-  return objects;
+  return objectParams;
 }

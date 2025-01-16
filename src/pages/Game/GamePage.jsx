@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled, { css, useTheme } from "styled-components";
-import { useLocale } from "../../utils/localization/localization";
-import Game from "../../game/game";
+import { useLocale } from "@/utils/localization/localization";
+import Simulation from "@/game/simulation";
 
-import Scoreboard from "../../components/parts/Scoreboard/Scoreboard";
-import { Button } from "../../components/ui";
+import Scoreboard from "@/components/parts/Scoreboard/Scoreboard";
+import { Button } from "@/components/ui";
 import {
   ArrowLeftTailIcon,
   PauseFilledIcon,
@@ -15,9 +15,10 @@ import {
   SkipForwardFilledIcon,
   TrackNextFilledIcon,
   TrackPrevFilledIcon,
-} from "../../components/Icons";
+} from "@/components/Icons";
 
 import content from "./GamePage.content";
+
 import { Events } from "matter-js";
 
 // Component
@@ -38,26 +39,26 @@ const GamePage = () => {
     const gameCfg = {
       colors: theme.color,
     };
-    const game = new Game({ canvas: canvasRef.current, cfg: gameCfg });
+    const game = new Simulation({ canvas: canvasRef.current, cfg: gameCfg });
     setGame(game);
 
     game.run();
     setPlaying(true);
-    setPersons(game.manager.getPersons());
+    // setPersons(game.manager.getPersons());
 
-    const handlePersonsUpdate = ({ persons }) => {
-      setPersons(
-        // persons
-        persons.toSorted((personA, personB) => personB.score - personA.score)
-      );
-    };
+    // const handlePersonsUpdate = ({ persons }) => {
+    //   setPersons(
+    //     // persons
+    //     persons.toSorted((personA, personB) => personB.score - personA.score)
+    //   );
+    // };
 
-    Events.on(game.manager, "updatePersons", handlePersonsUpdate);
+    // Events.on(game.manager, "updatePersons", handlePersonsUpdate);
 
-    return () => {
-      Events.off(game.manager, "updatePersons", handlePersonsUpdate);
-      game.destroy();
-    };
+    // return () => {
+    //   Events.off(game.manager, "updatePersons", handlePersonsUpdate);
+    //   game.destroy();
+    // };
   }, []);
 
   const handlePlayClick = () => {

@@ -1,4 +1,5 @@
-import { random, randomWeighted } from "@/utils/common";
+import { random } from "@/utils/common";
+import { DECISION, MOVE } from "./constants";
 
 // Class
 
@@ -20,6 +21,7 @@ const strategies = {
     emoji: "😊",
     color: "pink",
     description: "Always cooperates no matter what",
+
     decide: function () {
       return DECISION.cooperate;
     },
@@ -30,6 +32,7 @@ const strategies = {
     emoji: "😈",
     color: "purple",
     description: "Always decieves no matter what",
+
     decide: function () {
       return DECISION.deceive;
     },
@@ -40,6 +43,7 @@ const strategies = {
     emoji: "🤪",
     color: "orange", //to do gradient
     description: "Makes decision radomly",
+
     decide: function () {
       return !!random(2);
     },
@@ -50,6 +54,7 @@ const strategies = {
     emoji: "🤨",
     color: "blue",
     description: "First time he cooperates. Then repeats last oppenents move",
+
     decide: function (interactions) {
       if (interactions.length === 0) return true;
       else return interactions[interactions.length - 1][MOVE.his];
@@ -57,24 +62,6 @@ const strategies = {
   }),
 };
 
-// Random strategy
-
-function getRandomStrategy() {
-  const values = Object.values(strategies);
-  return values[random(values.length)];
-}
-
-function getRandomWeightedStrategy(distribution) {
-  const randomStrategy = randomWeighted(distribution);
-  return strategies[randomStrategy];
-}
-
 //
 
-export {
-  strategies,
-  getRandomStrategy,
-  getRandomWeightedStrategy,
-  DECISION,
-  MOVE,
-};
+export { strategies };

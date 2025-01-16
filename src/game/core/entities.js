@@ -7,7 +7,8 @@ export default class Entities {
     if (!this.categories[category]) {
       this.categories[category] = [];
     }
-    this.categories[category].push(entity);
+    if (Array.isArray(entity)) this.categories[category].push(...entity);
+    else this.categories[category].push(entity);
   }
 
   remove(category, entity) {

@@ -1,3 +1,5 @@
+import { randomItem } from "@/utils/common";
+
 const names = [
   "Alexander",
   "Olivia",
@@ -195,3 +197,9 @@ const surnames = [
   "Barnes",
   "Fisher",
 ];
+
+// Random Name
+
+export function getRandomName() {
+  return `${randomItem(names)} ${randomItem(surnames)}`;
+}

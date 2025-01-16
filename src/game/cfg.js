@@ -30,7 +30,7 @@ const gameCfg = {
   entropyFrequence: 10,
   entropyValue: -10,
 
-  distribution: {
+  strategyDistribution: {
     kind: 3,
     villain: 3,
     imitator: 3,

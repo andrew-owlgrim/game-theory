@@ -1,5 +1,4 @@
 import Matter, { Engine, Render, Runner, Events } from "matter-js";
-import GameManager from "../entities/gameManager";
 import Renderer from "./renderer";
 import Camera from "./camera";
 import defaultCfg from "../cfg";
@@ -22,6 +21,7 @@ export default class Game {
       entities: this.entities,
       camera: this.camera,
     });
+    this.mechanics = [];
 
     gameContext.cfg = this.cfg;
     gameContext.engine = this.engine;
