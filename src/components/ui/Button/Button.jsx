@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { wrapTextNodes } from "../../../utils/common";
+import { wrapTextNodes } from "@/utils/reactUtils";
 
 // Component
 

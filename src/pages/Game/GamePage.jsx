@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import styled, { css, useTheme } from "styled-components";
 import { useLocale } from "@/utils/localization/localization";
-import Simulation from "@/game/simulation";
+import Simulation from "@/game/simulation/Simulation";
 
 import Scoreboard from "@/components/parts/Scoreboard/Scoreboard";
 import { Button } from "@/components/ui";
@@ -32,7 +32,6 @@ const GamePage = () => {
   const [game, setGame] = useState(null);
 
   const canvasRef = useRef();
-
   const theme = useTheme();
 
   useEffect(() => {
@@ -42,23 +41,15 @@ const GamePage = () => {
     const game = new Simulation({ canvas: canvasRef.current, cfg: gameCfg });
     setGame(game);
 
-    game.run();
-    setPlaying(true);
-    // setPersons(game.manager.getPersons());
+    // Запуск обновления списка игроков раз в секунду
+    const interval = setInterval(() => {
+      setPersons(game.getScoreboard());
+    }, 1000);
 
-    // const handlePersonsUpdate = ({ persons }) => {
-    //   setPersons(
-    //     // persons
-    //     persons.toSorted((personA, personB) => personB.score - personA.score)
-    //   );
-    // };
-
-    // Events.on(game.manager, "updatePersons", handlePersonsUpdate);
-
-    // return () => {
-    //   Events.off(game.manager, "updatePersons", handlePersonsUpdate);
-    //   game.destroy();
-    // };
+    return () => {
+      clearInterval(interval); // Очистка интервала при размонтировании
+      game.clear();
+    };
   }, []);
 
   const handlePlayClick = () => {

@@ -1,4 +1,4 @@
-import { objectMap } from "../../common";
+import { objectMap } from "@/utils/jsUtils";
 import cfg from "../Theme.cfg";
 
 // Size

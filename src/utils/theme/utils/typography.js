@@ -1,5 +1,5 @@
 import { css } from "styled-components";
-import { objectMap } from "../../common";
+import { objectMap } from "@/utils/jsUtils";
 import { parseScreen } from "./size";
 import cfg from "../Theme.cfg";
 

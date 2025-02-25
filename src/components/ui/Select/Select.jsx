@@ -1,6 +1,6 @@
 import React, { cloneElement, useEffect, useRef, useState } from "react";
 import styled, { css, useTheme } from "styled-components";
-import { wrapTextNodes } from "@/utils/common";
+import { wrapTextNodes } from "@/utils/reactUtils";
 
 import cfg from "./Select.cfg";
 import Option from "./Select.Option";

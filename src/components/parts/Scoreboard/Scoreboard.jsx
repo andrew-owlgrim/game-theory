@@ -5,7 +5,7 @@ function Scoreboard({ persons, ...props }) {
   return (
     <ScoreboardContainer {...props}>
       {persons.map((person, index) => (
-        <Person person={person} key={index} place={index + 1} />
+        <Person person={person} key={person.id} place={index + 1} />
       ))}
     </ScoreboardContainer>
   );

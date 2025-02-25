@@ -2,9 +2,9 @@ import styled, { css } from "styled-components";
 
 function Person({ person, place }) {
   return (
-    <PersonStatsContainer $place={place} $color={person.strategy.color}>
+    <PersonStatsContainer $place={place} $color={person.view.color}>
       {place && <p className="place">#{place}</p>}
-      <p className="noto-emoji emoji">{person.strategy.emoji}</p>
+      <p className="noto-emoji emoji">{person.emoji}</p>
       <p className="name">{person.name}</p>
       <p className="score">{person.score}</p>
     </PersonStatsContainer>
