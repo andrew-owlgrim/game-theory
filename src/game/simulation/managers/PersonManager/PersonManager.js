@@ -2,22 +2,33 @@ import { GameManager } from "../../../gameEngine";
 import Person from "../../entities/Person/Person";
 import { getRandomPosition, getRandomVelocity } from "./parameters";
 import { randomItem } from "@/utils/mathUtils";
-import { Kind, Villain, Random, TitForTat } from "../../Strategy";
 import getRandomName from "./names";
-import { Body } from "matter-js";
-const strategies = [Kind, Villain, Random, TitForTat];
+import { Body, Events } from "matter-js";
+import { getPseudoRandomStrategy as getStrategy } from "./strategySelector";
+import { objectFilter } from "@/utils/jsUtils";
 
 export default class PersonManager extends GameManager {
   constructor(game) {
     super(game);
     this.persons = [];
+    this.strategyWeights = game.cfg.strategyWeights;
   }
 
   add() {
+    Events.trigger(this.game, "beforePersonSpawn");
+
     const game = this.game;
 
-    const randomStrategy = randomItem(strategies);
-    const strategy = new randomStrategy();
+    const filteredStrategyWeights = objectFilter(
+      this.strategyWeights,
+      (_, name) => game.cfg.allowedStrategies.includes(name)
+    );
+
+    const strategy = getStrategy(
+      filteredStrategyWeights,
+      this.persons,
+      this.game.cfg.strategyDeterminism
+    );
 
     const strategyColor = game.cfg.strategies[strategy.name].color;
     const strategyHexColor =
@@ -51,5 +62,9 @@ export default class PersonManager extends GameManager {
   remove(person) {
     this.game.removeEntity(person);
     this.persons = this.persons.filter((item) => item.id !== person.id);
+  }
+
+  setStrategyWeights(strategyWeights) {
+    this.strategyWeights = strategyWeights;
   }
 }

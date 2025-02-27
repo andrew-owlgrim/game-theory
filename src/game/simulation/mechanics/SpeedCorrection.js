@@ -9,24 +9,21 @@ export default class SpeedCorrection extends GameMechanic {
   apply() {
     const persons = this.game.managers.personManager.persons;
     const targetSpeed = this.game.cfg.moveSpeed;
-    const correctionForce = this.game.cfg.msCorrectionForce / 60;
-    const scalingFactor = targetSpeed * 0.5; // Чем больше, тем мягче коррекция
+    const scalingFactor = this.game.cfg.msCorrectionFactor;
 
-    persons.forEach((person) => {
+    persons.forEach((person, index) => {
       const body = person.body;
       const currentSpeed = Body.getSpeed(body);
       const deltaSpeed = currentSpeed - targetSpeed;
 
       if (Math.abs(deltaSpeed) > 0.1) {
-        const correctionStep =
-          correctionForce *
-          (1 - Math.exp(-Math.abs(deltaSpeed) / scalingFactor));
+        const correctionStep = deltaSpeed * scalingFactor;
 
-        let newSpeed = currentSpeed;
+        let newSpeed = currentSpeed - correctionStep;
         if (deltaSpeed > 0) {
-          newSpeed = Math.max(targetSpeed, currentSpeed - correctionStep);
+          newSpeed = Math.max(targetSpeed, newSpeed);
         } else {
-          newSpeed = Math.min(targetSpeed, currentSpeed + correctionStep);
+          newSpeed = Math.min(targetSpeed, newSpeed);
         }
 
         Body.setSpeed(body, newSpeed);

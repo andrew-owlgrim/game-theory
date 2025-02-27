@@ -30,4 +30,8 @@ export default class GameMechanic {
   apply(deltaTime) {
     throw new Error("Method must be implemented in subclass");
   }
+
+  get name() {
+    return this.constructor;
+  }
 }

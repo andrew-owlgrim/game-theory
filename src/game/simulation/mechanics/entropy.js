@@ -1,20 +1,45 @@
-import Mechanic from "../core/mechanic";
+import { Events } from "matter-js";
+import { GameMechanic } from "../../gameEngine";
 
-export default class Entropy extends Mechanic {
+export default class Entropy extends GameMechanic {
   constructor(...args) {
     super(...args);
 
-    this.entropyApplied = false;
+    this.toApply = false;
+    this.bindedHandleNewDay = this.handleNewDay.bind(this);
+  }
+
+  init() {
+    Events.on(this.game, "newDay", this.bindedHandleNewDay);
+  }
+
+  clear() {
+    Events.off(this.game, "newDay", this.bindedHandleNewDay);
+  }
+
+  handleNewDay() {
+    if (this.enabled) this.toApply = true;
   }
 
   apply() {
-    if (this.toInteract.length > 0) {
-      while (this.toInteract.length > 0) {
-        const [person1, person2] = this.toInteract.shift();
-        this.interaction(person1, person2);
-        this.totalInteractions++;
-      }
-      personsChanged = true;
+    if (!this.toApply) return;
+    this.toApply = false;
+
+    const persons = this.game.managers.personManager.persons;
+    if (!persons.length) return;
+
+    let entropyValue = this.game.cfg.entropyValue;
+
+    if (this.game.cfg.entropyAdaptive) {
+      const totalScore = persons.reduce((acc, person) => acc + person.score, 0);
+      entropyValue = Math.round(
+        (totalScore / persons.length) * this.game.cfg.entropyFactor
+      );
     }
+
+    console.log("entropyValue", entropyValue);
+    persons.forEach((person) => {
+      person.score -= entropyValue;
+    });
   }
 }

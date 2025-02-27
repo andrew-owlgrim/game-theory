@@ -9,7 +9,7 @@ export default class GameEngine {
 
     this.entities = [];
     this.managers = {};
-    this.mechanics = [];
+    this.mechanics = {};
     this.effects = [];
 
     this.runner = Runner.create();
@@ -55,7 +55,7 @@ export default class GameEngine {
     this.effects.forEach((effect) => {
       effect.update(deltaTime);
     });
-    this.mechanics.forEach((mechanic) => {
+    Object.values(this.mechanics).forEach((mechanic) => {
       if (mechanic.enabled) mechanic.apply(deltaTime);
     });
   }
@@ -100,7 +100,8 @@ export default class GameEngine {
   // Mechanics
 
   addMechanic(mechanic) {
-    this.mechanics.push(mechanic);
+    this.mechanics[mechanic.constructor.name] = mechanic;
+    mechanic.init();
   }
 
   // Effects

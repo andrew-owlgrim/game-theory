@@ -31,7 +31,6 @@ export default class Interactions extends GameMechanic {
       if (bodyA.label === "personBody" && bodyB.label === "personBody")
         this.unhandledInteractions.push([bodyA.person, bodyB.person]);
     });
-    console.log("collision");
   }
 
   // Applying

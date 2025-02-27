@@ -2,9 +2,10 @@ import { DECISION, MOVE } from "../constants";
 import Strategy from "./Strategy";
 
 export default class TitForTat extends Strategy {
+  static name = "titForTat";
+
   constructor() {
     super(); //👍
-    this.name = "titForTat";
   }
 
   makeMove(personId) {

@@ -70,7 +70,7 @@ const GamePage = () => {
         <div className="margin bottom">
           <div className="player-controls">
             <Button variant="bare" round>
-              <TrackPrevFilledIcon onClick={() => game.slowDown()} />
+              <TrackPrevFilledIcon onClick={() => game.slower()} />
             </Button>
             <Button variant="bare" round>
               <SkipBackFilledIcon />
@@ -82,7 +82,7 @@ const GamePage = () => {
               <SkipForwardFilledIcon />
             </Button>
             <Button variant="bare" round>
-              <TrackNextFilledIcon onClick={() => game.speedUp()} />
+              <TrackNextFilledIcon onClick={() => game.faster()} />
             </Button>
           </div>
         </div>

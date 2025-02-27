@@ -1,6 +1,7 @@
 export default class Strategy {
+  static name = "Strategy";
+
   constructor() {
-    this.name = "baseStrategy";
     this.interactions = {};
     this.knowledge = {};
   }
@@ -14,5 +15,9 @@ export default class Strategy {
   }
   makeMove(personId) {
     throw new Error("makeMove method is not implemented");
+  }
+
+  get name() {
+    return this.constructor.name;
   }
 }
