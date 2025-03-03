@@ -2,10 +2,12 @@ import { Engine, Events } from "matter-js";
 import { GameEngine } from "../gameEngine";
 
 import defaultCfg from "./cfg";
-import WallManager from "./managers/WallManager/WallManager";
-import PersonManager from "./managers/PersonManager/PersonManager";
-import StatisticsManager from "./managers/StatisticsManager/StatisticsManager";
-import TimeManager from "./managers/TimeManager";
+import {
+  WallManager,
+  PersonManager,
+  StatisticsManager,
+  TimeManager,
+} from "./managers";
 import {
   SpeedCorrection,
   MaintainPopulation,
@@ -15,6 +17,7 @@ import {
   Evolution,
   Entropy,
   WeaknessFilter,
+  AgeTax,
 } from "./mechanics";
 
 export default class Simulation extends GameEngine {
@@ -45,11 +48,12 @@ export default class Simulation extends GameEngine {
     // this.addMechanic(new Log(this));
     this.addMechanic(new SpeedCorrection(this));
     this.addMechanic(new Interactions(this));
+    this.addMechanic(new AgeTax(this, this.cfg.ageTaxEnabled));
     this.addMechanic(new Death(this));
-    this.addMechanic(new Evolution(this, false));
+    this.addMechanic(new Evolution(this, this.cfg.EvolutionEnabled));
     this.addMechanic(new MaintainPopulation(this));
     this.addMechanic(new Entropy(this, this.cfg.entropyEnabled));
-    this.addMechanic(new WeaknessFilter(this, this.cfg.WeaknessFilterEnabled));
+    this.addMechanic(new WeaknessFilter(this, this.cfg.weaknessFilterEnabled));
 
     // entities
     this.managers.wallManager.createBoundary();
@@ -57,11 +61,12 @@ export default class Simulation extends GameEngine {
     for (let i = 0; i < this.cfg.population; i++) {
       this.managers.personManager.add();
     }
+
     this.mechanics.Evolution.on();
 
     // events
-    Events.on(this, "newDay", () => {
-      console.log("new day");
+    Events.on(this, "newDay", (e) => {
+      console.log("new day:", e.day);
     });
 
     // first render

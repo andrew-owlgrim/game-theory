@@ -1,17 +1,20 @@
-import { GameManager } from "../../../gameEngine";
-import Person from "../../entities/Person/Person";
-import { getRandomPosition, getRandomVelocity } from "./parameters";
-import { randomItem } from "@/utils/mathUtils";
-import getRandomName from "./names";
 import { Body, Events } from "matter-js";
+import { GameManager } from "../../../gameEngine";
+
+import Person from "../../entities/Person/Person";
+
+import { objectMap, objectFilter } from "@/utils/jsUtils";
+
+import { getRandomPosition, getRandomVelocity } from "./parameters";
 import { getPseudoRandomStrategy as getStrategy } from "./strategySelector";
-import { objectFilter } from "@/utils/jsUtils";
+import getRandomName from "./names";
 
 export default class PersonManager extends GameManager {
   constructor(game) {
     super(game);
+
     this.persons = [];
-    this.strategyWeights = game.cfg.strategyWeights;
+    this.strategyWeights = normalizeWeights(game.cfg.strategyWeights);
   }
 
   add() {
@@ -50,6 +53,7 @@ export default class PersonManager extends GameManager {
         color: strategyColor,
         fillStyle: strategyHexColor,
       },
+      birthday: game.managers.timeManager.currentDay,
     });
 
     const { vx, vy } = getRandomVelocity(game.cfg.moveSpeed);
@@ -67,4 +71,9 @@ export default class PersonManager extends GameManager {
   setStrategyWeights(strategyWeights) {
     this.strategyWeights = strategyWeights;
   }
+}
+
+function normalizeWeights(weights) {
+  const totalWeight = Object.values(weights).reduce((sum, w) => sum + w, 0);
+  return objectMap(weights, (value) => value / totalWeight);
 }

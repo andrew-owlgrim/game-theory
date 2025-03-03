@@ -1,14 +1,30 @@
+import { Events } from "matter-js";
 import { GameManager } from "../../../gameEngine";
 
 export default class StatisticsManager extends GameManager {
   constructor(game) {
     super(game);
     this.strategies = {}; // { strategyName: { count, totalScore, averageScore } }
+    this.persons = []; // [{ id, age }]
+
+    this.bindedHandleNewDay = this.#handleNewDay.bind(this);
+
+    this.init();
   }
 
-  update() {
-    this.updateStrategies();
+  init() {
+    // Events.on(this.game, "newDay", this.bindedHandleNewDay);
   }
+
+  clear() {
+    // Events.off(this.game, "newDay", this.bindedHandleNewDay);
+  }
+
+  // Events
+
+  #handleNewDay() {}
+
+  // Persons
 
   // Stretegies
 

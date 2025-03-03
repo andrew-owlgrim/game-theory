@@ -28,18 +28,18 @@ const gameCfg = {
 
   room: 5,
   boundarySize: 550,
-  personSize: 40,
+  personSize: 10,
   initialScore: 25,
 
-  dayDuration: 10000, // ms
+  dayDuration: 20000, // ms
 
   // Strategies
 
   allowedStrategies: ["titForTat", "kind", "villain"],
   strategyWeights: {
-    kind: 3,
-    villain: 3,
-    titForTat: 3,
+    kind: 1,
+    villain: 1,
+    titForTat: 1,
     random: 1,
   },
   strategyDeterminism: 1, // 0 - random, 1 - deterministic
@@ -47,7 +47,7 @@ const gameCfg = {
   // Mechanics
 
   // population
-  population: 20,
+  population: 150,
   spawnCooldown: 20,
 
   // naturalDeath
@@ -73,7 +73,18 @@ const gameCfg = {
   entropyValue: 10,
 
   // weakness filter
-  weaknessFilterEnabled: true,
+  weaknessFilterEnabled: false,
+
+  // ageTax
+  ageTaxEnabled: true,
+  taxFactor: 2,
+
+  // evolution
+  evolutionEnabled: true,
+  evolutionSmoothing: 3,
+  evolutionMinWeight: 0.01,
+  evolutionMaxWeight: 0.9,
+  evolutionFactor: 0.1,
 };
 
 export default gameCfg;

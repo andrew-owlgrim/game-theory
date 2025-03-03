@@ -48,8 +48,8 @@ export default class Interactions extends GameMechanic {
     const moveA = personA.strategy.makeMove(personB.id);
     const moveB = personB.strategy.makeMove(personA.id);
 
-    personA.strategy.addInteraction(personB, moveA, moveB);
-    personB.strategy.addInteraction(personA, moveB, moveA);
+    personA.strategy.addInteraction(personB.id, [moveA, moveB]);
+    personB.strategy.addInteraction(personA.id, [moveB, moveA]);
 
     const [payoffA, payoffB] = this.game.cfg.payoffs[moveA][moveB];
 

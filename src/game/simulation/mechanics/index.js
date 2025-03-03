@@ -4,8 +4,9 @@ import Death from "./death";
 import SpeedCorrection from "./speedCorrection";
 import Evolution from "./Evolution";
 import Log from "./Log";
-import Entropy from "./entropy";
+import Entropy from "./Entropy";
 import WeaknessFilter from "./WeaknessFilter";
+import AgeTax from "./AgeTax";
 
 export {
   Interactions,
@@ -16,4 +17,5 @@ export {
   Log,
   Entropy,
   WeaknessFilter,
+  AgeTax,
 };

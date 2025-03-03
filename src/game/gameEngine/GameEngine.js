@@ -101,7 +101,6 @@ export default class GameEngine {
 
   addMechanic(mechanic) {
     this.mechanics[mechanic.constructor.name] = mechanic;
-    mechanic.init();
   }
 
   // Effects

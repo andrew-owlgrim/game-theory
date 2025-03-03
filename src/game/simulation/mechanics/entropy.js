@@ -7,6 +7,7 @@ export default class Entropy extends GameMechanic {
 
     this.toApply = false;
     this.bindedHandleNewDay = this.handleNewDay.bind(this);
+    this.init();
   }
 
   init() {
