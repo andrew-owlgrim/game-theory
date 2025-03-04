@@ -19,6 +19,7 @@ import {
   WeaknessFilter,
   AgeTax,
 } from "./mechanics";
+import DebugOverlay from "./managers/DebugOverlay";
 
 export default class Simulation extends GameEngine {
   constructor(props) {
@@ -43,6 +44,7 @@ export default class Simulation extends GameEngine {
     this.managers.personManager = new PersonManager(this);
     this.managers.statisticsManager = new StatisticsManager(this);
     this.managers.timeManager = new TimeManager(this);
+    this.managers.debugOverlay = new DebugOverlay(this);
 
     // mechanics
     // this.addMechanic(new Log(this));
@@ -65,9 +67,6 @@ export default class Simulation extends GameEngine {
     this.mechanics.Evolution.on();
 
     // events
-    Events.on(this, "newDay", (e) => {
-      console.log("new day:", e.day);
-    });
 
     // first render
     setTimeout(() => {

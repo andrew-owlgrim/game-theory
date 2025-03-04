@@ -14,7 +14,14 @@ export default class PersonManager extends GameManager {
     super(game);
 
     this.persons = [];
-    this.strategyWeights = normalizeWeights(game.cfg.strategyWeights);
+
+    let weights = objectFilter(
+      game.cfg.strategies,
+      (strategy) => strategy.enabled
+    );
+    weights = objectMap(weights, (strategy) => strategy.weight);
+    weights = normalizeWeights(weights);
+    this.strategyWeights = weights;
   }
 
   add() {
@@ -22,13 +29,8 @@ export default class PersonManager extends GameManager {
 
     const game = this.game;
 
-    const filteredStrategyWeights = objectFilter(
-      this.strategyWeights,
-      (_, name) => game.cfg.allowedStrategies.includes(name)
-    );
-
     const strategy = getStrategy(
-      filteredStrategyWeights,
+      this.strategyWeights,
       this.persons,
       this.game.cfg.strategyDeterminism
     );
@@ -69,7 +71,7 @@ export default class PersonManager extends GameManager {
   }
 
   setStrategyWeights(strategyWeights) {
-    this.strategyWeights = strategyWeights;
+    this.strategyWeights = normalizeWeights(strategyWeights);
   }
 }
 

@@ -1,4 +1,4 @@
-import renderBody from "./drawBody";
+import { Events } from "matter-js";
 import Camera from "./Camera";
 
 export default class RenderEngine {
@@ -78,6 +78,7 @@ export default class RenderEngine {
     });
 
     this.#resetCamera();
+    Events.trigger(this, "afterRender");
   }
 
   #getEntitiesSortedByLayers() {

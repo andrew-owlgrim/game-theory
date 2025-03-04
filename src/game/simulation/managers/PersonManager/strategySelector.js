@@ -99,6 +99,6 @@ export function getPseudoRandomStrategy(
 
   // 7. Выбираем стратегию с учетом интерполированных весов
   const strategyName = randomWeight(interpolatedWeights);
-  console.log(actualCounts, interpolatedWeights, strategyName);
+  // console.log(actualCounts, interpolatedWeights, strategyName);
   return new strategies[strategyName]();
 }

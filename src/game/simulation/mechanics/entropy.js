@@ -38,7 +38,7 @@ export default class Entropy extends GameMechanic {
       );
     }
 
-    console.log("entropyValue", entropyValue);
+    // console.log("entropyValue", entropyValue);
     persons.forEach((person) => {
       person.score -= entropyValue;
     });

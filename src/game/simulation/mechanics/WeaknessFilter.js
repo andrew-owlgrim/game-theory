@@ -33,7 +33,7 @@ export default class WeaknessFilter extends GameMechanic {
       (a, b) => a.score - b.score
     );
 
-    console.log("remove weakest person", sortedPersons[0]);
+    // console.log("remove weakest person", sortedPersons[0]);
     personManager.remove(sortedPersons[0]);
   }
 }

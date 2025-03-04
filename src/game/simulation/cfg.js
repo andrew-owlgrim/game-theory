@@ -3,11 +3,11 @@ const gameCfg = {
 
   layers: ["walls", "bgEffects", "persons", "effects"],
   strategies: {
-    titForTat: { emoji: "🤨", color: "blue" },
-    forgivingTitForTat: { emoji: "", color: "blue" },
-    kind: { emoji: "😊", color: "pink" },
-    villain: { emoji: "😈", color: "purple" },
-    random: { emoji: "🤪", color: "orange" },
+    titForTat: { weight: 3, enabled: true, emoji: "🤨", color: "blue" },
+    forgivingTitForTat: { weight: 3, enabled: false, emoji: "", color: "blue" },
+    kind: { weight: 3, enabled: true, emoji: "😊", color: "pink" },
+    villain: { weight: 3, enabled: true, emoji: "😈", color: "purple" },
+    random: { weight: 1, enabled: true, emoji: "🤪", color: "orange" },
   },
   personStates: {
     neutral: "😐",
@@ -28,26 +28,19 @@ const gameCfg = {
 
   room: 5,
   boundarySize: 550,
-  personSize: 10,
+  personSize: 30,
   initialScore: 25,
 
   dayDuration: 20000, // ms
 
   // Strategies
 
-  allowedStrategies: ["titForTat", "kind", "villain"],
-  strategyWeights: {
-    kind: 1,
-    villain: 1,
-    titForTat: 1,
-    random: 1,
-  },
   strategyDeterminism: 1, // 0 - random, 1 - deterministic
 
   // Mechanics
 
   // population
-  population: 150,
+  population: 20,
   spawnCooldown: 20,
 
   // naturalDeath
@@ -82,9 +75,9 @@ const gameCfg = {
   // evolution
   evolutionEnabled: true,
   evolutionSmoothing: 3,
-  evolutionMinWeight: 0.01,
-  evolutionMaxWeight: 0.9,
-  evolutionFactor: 0.1,
+  evolutionMinWeight: 0.02,
+  evolutionMaxWeight: 0.8,
+  evolutionFactor: 1,
 };
 
 export default gameCfg;

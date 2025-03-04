@@ -62,7 +62,7 @@ export default class Evolution extends GameMechanic {
 
     // Calculate delta
     const deltaScore = objectMap(averageScore, (score, strategy) => {
-      return score - (this.lastAverage[strategy] || 0);
+      return score - this.lastAverage[strategy] || 0;
     });
 
     this.lastAverage = averageScore;
@@ -71,15 +71,15 @@ export default class Evolution extends GameMechanic {
 
     // Get recent delta average
     const recentDeltasAverage = {};
-    this.recentDeltas.forEach((deltas) => {
+    for (let deltas of this.recentDeltas) {
       for (const strategy in deltas) {
-        if (!recentDeltasAverage[strategy])
-          recentDeltasAverage[strategy] = deltas[strategy];
-        else
-          recentDeltasAverage[strategy] +=
-            deltas[strategy] / this.recentDeltas.length;
+        if (!recentDeltasAverage[strategy]) recentDeltasAverage[strategy] = 0;
+        recentDeltasAverage[strategy] += deltas[strategy];
       }
-    });
+    }
+    for (const strategy in recentDeltasAverage) {
+      recentDeltasAverage[strategy] /= this.recentDeltas.length;
+    }
 
     // Deltas sum to zero
     const zeroSumDeltas = scoresToZeroSum(recentDeltasAverage);
@@ -102,21 +102,22 @@ export default class Evolution extends GameMechanic {
     );
 
     // Set new Weights
-    console.log(
-      "average score:",
-      averageScore,
-      "delta score:",
-      deltaScore,
-      "delta average",
-      recentDeltasAverage,
-      "zero sum",
-      zeroSumDeltas,
-      "new weights",
-      newWeights,
-      "scaled weights",
-      scaledWeights
-    );
-    personManager.setStrategyWeights(newWeights);
+
+    // console.log(
+    //   "average score:",
+    //   averageScore,
+    //   "delta score:",
+    //   deltaScore,
+    //   "delta average",
+    //   recentDeltasAverage,
+    //   "zero sum",
+    //   zeroSumDeltas,
+    //   "new weights",
+    //   newWeights,
+    //   "scaled weights",
+    //   scaledWeights
+    // );
+    personManager.setStrategyWeights(scaledWeights);
   }
 }
 
