@@ -28,8 +28,17 @@ export default class Interactions extends GameMechanic {
 
   handleCollision(e) {
     e.pairs.forEach(({ bodyA, bodyB }) => {
-      if (bodyA.label === "personBody" && bodyB.label === "personBody")
+      if (
+        bodyA.label === "personBody" &&
+        bodyB.label === "personBody" &&
+        !this.unhandledInteractions.some(
+          ([a, b]) =>
+            (a === bodyA.person && b === bodyB.person) ||
+            (a === bodyB.person && b === bodyA.person)
+        )
+      ) {
         this.unhandledInteractions.push([bodyA.person, bodyB.person]);
+      }
     });
   }
 
@@ -55,5 +64,9 @@ export default class Interactions extends GameMechanic {
 
     personA.score += payoffA;
     personB.score += payoffB;
+
+    const effectManager = this.game.managers.effectManager;
+    effectManager.run("InteractionEffect", { person: personA, score: payoffA });
+    effectManager.run("InteractionEffect", { person: personB, score: payoffB });
   }
 }

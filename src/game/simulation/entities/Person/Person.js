@@ -23,6 +23,7 @@ export default class Person extends Entity {
     this.emoji = emoji ?? "🤖";
     this.score = score ?? 0;
     this.birthday = birthday;
+    this.state = null;
   }
 
   render(context) {

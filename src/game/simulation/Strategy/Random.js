@@ -9,6 +9,6 @@ export default class Random extends Strategy {
   }
 
   makeMove(personId) {
-    return !!random();
+    return !!random(2);
   }
 }

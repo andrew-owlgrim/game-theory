@@ -4,6 +4,12 @@ import { GameManager } from "../../../gameEngine";
 export default class StatisticsManager extends GameManager {
   constructor(game) {
     super(game);
+    this.global = {
+      totalInteractions: 0,
+      daysPassed: 0,
+      interactionsPerDay: 0,
+      averageScore: 0,
+    };
     this.strategies = {}; // { strategyName: { count, totalScore, averageScore } }
     this.persons = []; // [{ id, age }]
 

@@ -53,7 +53,7 @@ export default class GameEngine {
   #loop() {
     const deltaTime = this.physics.timing.lastDelta;
     this.effects.forEach((effect) => {
-      effect.update(deltaTime);
+      this.updateEffect(effect, deltaTime);
     });
     Object.values(this.mechanics).forEach((mechanic) => {
       if (mechanic.enabled) mechanic.apply(deltaTime);
@@ -83,6 +83,7 @@ export default class GameEngine {
   }
 
   removeEntity(entity) {
+    if (!entity) return;
     const index = this.entities.findIndex((e) => e.id === entity.id);
     if (index === -1) {
       console.warn(`Entity with id ${entity.id} not found`);
@@ -106,18 +107,23 @@ export default class GameEngine {
   // Effects
 
   addEffect(effect) {
-    const existingEffect = this.effects.find(
-      (e) => e.effectKey === effect.effectKey
-    );
-    if (existingEffect) this.removeEffect(existingEffect);
+    const existingEffect = this.effects.find((el) => el.key == effect.key);
+    if (existingEffect) {
+      this.removeEffect(existingEffect);
+    }
 
     this.effects.push(effect);
+    effect.init();
+  }
+
+  updateEffect(effect, deltaTime) {
+    effect.elapsedTime += deltaTime;
+    effect.update(deltaTime);
+    if (effect.elapsedTime >= effect.duration) this.removeEffect(effect);
   }
 
   removeEffect(effect) {
-    const index = this.effects.findIndex(
-      (e) => e.effectKey === effect.effectKey
-    );
+    const index = this.effects.findIndex((el) => el.key === effect.key);
 
     if (index !== -1) {
       this.effects[index].clear();

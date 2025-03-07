@@ -1,7 +1,7 @@
 const gameCfg = {
   // Render
 
-  layers: ["walls", "bgEffects", "persons", "effects"],
+  layers: ["walls", "bgEffects", "persons", "effects", "overlay"],
   strategies: {
     titForTat: { weight: 3, enabled: true, emoji: "🤨", color: "blue" },
     forgivingTitForTat: { weight: 3, enabled: false, emoji: "", color: "blue" },
@@ -15,6 +15,7 @@ const gameCfg = {
     upset: "☹",
     dead: "💀",
   },
+  interactionEffectDuration: 800,
   stateAnimationDuration: 400,
   deathAnimationDuration: 2000,
 

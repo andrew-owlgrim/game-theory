@@ -1,8 +1,8 @@
 export default class GameEffect {
-  constructor(params = {}) {
-    this.game = params.game;
-    this.key = params.key;
-    this.duration = params.duration;
+  constructor({ game, key, duration }) {
+    this.game = game;
+    this.key = key;
+    this.duration = duration;
     this.elapsedTime = 0;
   }
 

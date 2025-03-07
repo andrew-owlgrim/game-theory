@@ -7,6 +7,8 @@ import {
   PersonManager,
   StatisticsManager,
   TimeManager,
+  DebugOverlay,
+  EffectManager,
 } from "./managers";
 import {
   SpeedCorrection,
@@ -19,7 +21,9 @@ import {
   WeaknessFilter,
   AgeTax,
 } from "./mechanics";
-import DebugOverlay from "./managers/DebugOverlay";
+import Text from "./entities/Text/Text";
+import { transform } from "lodash";
+import { Transform } from "../render";
 
 export default class Simulation extends GameEngine {
   constructor(props) {
@@ -45,6 +49,7 @@ export default class Simulation extends GameEngine {
     this.managers.statisticsManager = new StatisticsManager(this);
     this.managers.timeManager = new TimeManager(this);
     this.managers.debugOverlay = new DebugOverlay(this);
+    this.managers.effectManager = new EffectManager(this);
 
     // mechanics
     // this.addMechanic(new Log(this));

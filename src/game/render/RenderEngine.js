@@ -97,7 +97,7 @@ export default class RenderEngine {
 
   #applyViewParams(view) {
     this.context.save();
-    this.context.globalAlpha = view.opacity || 1;
+    this.context.globalAlpha = view.opacity ?? 1;
     const { translate, rotate, scale } = view.transform;
     this.context.translate(translate.x, translate.y);
     this.context.rotate(rotate);

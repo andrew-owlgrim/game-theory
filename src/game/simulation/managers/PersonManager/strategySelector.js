@@ -40,7 +40,7 @@ export function getDistributedStrategy(strategyWeights, persons) {
     underRepresented.map((name) => [name, strategyWeights[name]])
   );
 
-  console.log(currentCounts, underRepresented);
+  // console.log(currentCounts, underRepresented);
   return new strategies[randomWeight(newWeights)]();
 }
 
