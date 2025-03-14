@@ -6,7 +6,7 @@ import { Transform } from "../../render";
 import Text from "../entities/Text/Text";
 
 export default class InteractionEffect extends GameEffect {
-  constructor({ game, person, score }) {
+  constructor({ game, person, score, mistake }) {
     super({
       game,
       key: `interaction-${person.id}`,
@@ -17,6 +17,7 @@ export default class InteractionEffect extends GameEffect {
     this.score = score;
     this.text = null;
     this.textTransition = null;
+    this.mistake = mistake;
   }
 
   init() {
@@ -67,6 +68,7 @@ export default class InteractionEffect extends GameEffect {
 
   #getEmoji() {
     const states = this.game.cfg.personStates;
+    if (this.mistake) return states.mistake;
     if (this.score > 0) return states.happy;
     if (this.score < 0) return states.upset;
     return states.neutral;

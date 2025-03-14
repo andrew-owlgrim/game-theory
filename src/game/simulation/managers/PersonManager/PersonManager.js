@@ -9,6 +9,11 @@ import { getRandomPosition, getRandomVelocity } from "./parameters";
 import { getPseudoRandomStrategy as getStrategy } from "./strategySelector";
 import getRandomName from "./names";
 
+import * as strategiesModule from "../../Strategy";
+const strategies = Object.fromEntries(
+  Object.entries(strategiesModule).map(([, v]) => [v.name, v])
+);
+
 export default class PersonManager extends GameManager {
   constructor(game) {
     super(game);
@@ -29,10 +34,13 @@ export default class PersonManager extends GameManager {
 
     const game = this.game;
 
-    const strategy = getStrategy(
+    const strategyName = getStrategy(
       this.strategyWeights,
       this.persons,
-      this.game.cfg.strategyDeterminism
+      game.cfg.strategyDeterminism
+    );
+    const strategy = new strategies[strategyName](
+      game.cfg.strategies[strategyName].options
     );
 
     const strategyColor = game.cfg.strategies[strategy.name].color;

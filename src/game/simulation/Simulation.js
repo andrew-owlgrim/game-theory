@@ -15,7 +15,6 @@ import {
   MaintainPopulation,
   Interactions,
   Death,
-  Log,
   Evolution,
   Entropy,
   WeaknessFilter,
@@ -57,7 +56,7 @@ export default class Simulation extends GameEngine {
     this.addMechanic(new Interactions(this));
     this.addMechanic(new AgeTax(this, this.cfg.ageTaxEnabled));
     this.addMechanic(new Death(this));
-    this.addMechanic(new Evolution(this, this.cfg.EvolutionEnabled));
+    this.addMechanic(new Evolution(this, this.cfg.evolutionEnabled));
     this.addMechanic(new MaintainPopulation(this));
     this.addMechanic(new Entropy(this, this.cfg.entropyEnabled));
     this.addMechanic(new WeaknessFilter(this, this.cfg.weaknessFilterEnabled));
@@ -68,8 +67,6 @@ export default class Simulation extends GameEngine {
     for (let i = 0; i < this.cfg.population; i++) {
       this.managers.personManager.add();
     }
-
-    this.mechanics.Evolution.on();
 
     // events
 

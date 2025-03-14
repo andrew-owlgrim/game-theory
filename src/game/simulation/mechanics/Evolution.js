@@ -27,7 +27,7 @@ export default class Evolution extends GameMechanic {
 
   off() {
     super.off();
-    personManager.setStrategyWeights(this.game.cfg.setStrategyWeights);
+    personManager.setStrategyWeights(this.game.cfg.strategies);
   }
 
   apply() {}

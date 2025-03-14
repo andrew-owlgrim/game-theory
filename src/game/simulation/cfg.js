@@ -3,17 +3,26 @@ const gameCfg = {
 
   layers: ["walls", "bgEffects", "persons", "effects", "overlay"],
   strategies: {
-    titForTat: { weight: 3, enabled: true, emoji: "🤨", color: "blue" },
-    forgivingTitForTat: { weight: 3, enabled: false, emoji: "", color: "blue" },
-    kind: { weight: 3, enabled: true, emoji: "😊", color: "pink" },
-    villain: { weight: 3, enabled: true, emoji: "😈", color: "purple" },
-    random: { weight: 1, enabled: true, emoji: "🤪", color: "orange" },
+    titForTat: { weight: 2, enabled: true, emoji: "🧐", color: "blue" },
+    forgivingTFT: {
+      weight: 2,
+      enabled: true,
+      emoji: "😌",
+      color: "blue",
+      options: {
+        forgivenessProbability: 0.25,
+      },
+    },
+    kind: { weight: 2, enabled: true, emoji: "😊", color: "pink" },
+    villain: { weight: 2, enabled: true, emoji: "😈", color: "purple" },
+    random: { weight: 1, enabled: false, emoji: "🤪", color: "orange" },
   },
   personStates: {
     neutral: "😐",
     happy: "😃",
     upset: "☹",
     dead: "💀",
+    mistake: "😬",
   },
   interactionEffectDuration: 800,
   stateAnimationDuration: 400,
@@ -27,7 +36,6 @@ const gameCfg = {
   moveSpeed: 2,
   msCorrectionFactor: 0.1, // how fast speed is corrected
 
-  room: 5,
   boundarySize: 550,
   personSize: 30,
   initialScore: 25,
@@ -59,6 +67,8 @@ const gameCfg = {
       false: [0, 0],
     },
   },
+  mistakes: true,
+  mistakeChance: 0.05,
 
   // entropy
   entropyEnabled: false,
@@ -70,11 +80,11 @@ const gameCfg = {
   weaknessFilterEnabled: false,
 
   // ageTax
-  ageTaxEnabled: true,
+  ageTaxEnabled: false,
   taxFactor: 2,
 
   // evolution
-  evolutionEnabled: true,
+  evolutionEnabled: false,
   evolutionSmoothing: 3,
   evolutionMinWeight: 0.02,
   evolutionMaxWeight: 0.8,

@@ -7,6 +7,8 @@ export default class Interactions extends GameMechanic {
     this.handleCollision = this.handleCollision.bind(this);
 
     this.unhandledInteractions = [];
+    this.mistakes = this.game.cfg.mistakes;
+    this.mistakeChance = this.game.cfg.mistakeChance;
 
     this.init();
   }
@@ -54,8 +56,23 @@ export default class Interactions extends GameMechanic {
   }
 
   interaction(personA, personB) {
-    const moveA = personA.strategy.makeMove(personB.id);
-    const moveB = personB.strategy.makeMove(personA.id);
+    let moveA = personA.strategy.makeMove(personB.id);
+    let moveB = personB.strategy.makeMove(personA.id);
+    let mistakeA = false,
+      MistakeB = false;
+
+    if (this.mistakes) {
+      if (Math.random() < this.mistakeChance) {
+        moveA = false;
+        mistakeA = true;
+        // console.log(`Person ${personA.name} made a mistake`);
+      }
+      if (Math.random() < this.mistakeChance) {
+        moveB = false;
+        MistakeB = true;
+        // console.log(`Person ${personB.name} made a mistake`);
+      }
+    }
 
     personA.strategy.addInteraction(personB.id, [moveA, moveB]);
     personB.strategy.addInteraction(personA.id, [moveB, moveA]);
@@ -66,7 +83,15 @@ export default class Interactions extends GameMechanic {
     personB.score += payoffB;
 
     const effectManager = this.game.managers.effectManager;
-    effectManager.run("InteractionEffect", { person: personA, score: payoffA });
-    effectManager.run("InteractionEffect", { person: personB, score: payoffB });
+    effectManager.run("InteractionEffect", {
+      person: personA,
+      score: payoffA,
+      mistake: mistakeA,
+    });
+    effectManager.run("InteractionEffect", {
+      person: personB,
+      score: payoffB,
+      mistake: MistakeB,
+    });
   }
 }

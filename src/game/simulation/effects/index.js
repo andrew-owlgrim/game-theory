@@ -1,3 +1,3 @@
-import InteractionEffect from "./TextEffect";
+import InteractionEffect from "./InteractionEffect";
 
 export { InteractionEffect };
