@@ -4,6 +4,7 @@ import { GameEffect } from "../../gameEngine";
 import { Transform } from "../../render";
 
 import Text from "../entities/Text/Text";
+import { hexOverlay } from "@/utils/color";
 
 export default class InteractionEffect extends GameEffect {
   constructor({ game, person, score, mistake }) {
@@ -24,6 +25,16 @@ export default class InteractionEffect extends GameEffect {
     const game = this.game;
 
     this.person.state = this.#getEmoji();
+    this.color = this.person.view.fillStyle;
+
+    this.colorTransition = new Transition({
+      setter: (value) =>
+        (this.person.view.fillStyle = hexOverlay(this.color, "#fff", value)),
+      from: 0.8,
+      to: 0,
+      duration: this.duration / 3,
+      easing: "easeOut",
+    });
 
     this.text = new Text({
       relatedEntity: this.person,
@@ -51,14 +62,24 @@ export default class InteractionEffect extends GameEffect {
 
   clear() {
     this.person.state = null;
+    this.person.view.fillStyle = this.color;
+    this.colorTransition = null;
+
     this.game.removeEntity(this.text);
     this.text = null;
     this.textTransition = null;
   }
 
   update(deltaTime) {
+    this.colorTransition?.update(deltaTime);
+    this.textTransition?.update(deltaTime);
+
+    if (this.elapsedTime >= this.duration / 3) {
+      this.person.view.fillStyle = this.color;
+      this.colorTransition = null;
+    }
+
     if (this.elapsedTime >= this.duration / 2) this.person.state = null;
-    this.textTransition.update(deltaTime);
 
     if (this.elapsedTime >= this.duration) {
       this.game.removeEntity(this.text);

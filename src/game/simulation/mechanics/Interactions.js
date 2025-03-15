@@ -63,12 +63,12 @@ export default class Interactions extends GameMechanic {
 
     if (this.mistakes) {
       if (Math.random() < this.mistakeChance) {
-        moveA = false;
+        moveA = !moveA;
         mistakeA = true;
         // console.log(`Person ${personA.name} made a mistake`);
       }
       if (Math.random() < this.mistakeChance) {
-        moveB = false;
+        moveB = !moveB;
         MistakeB = true;
         // console.log(`Person ${personB.name} made a mistake`);
       }

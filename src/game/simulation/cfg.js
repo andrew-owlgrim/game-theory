@@ -3,9 +3,20 @@ const gameCfg = {
 
   layers: ["walls", "bgEffects", "persons", "effects", "overlay"],
   strategies: {
-    titForTat: { weight: 2, enabled: true, emoji: "🧐", color: "blue" },
+    // simple
+    kind: { weight: 1, enabled: true, emoji: "😊", color: "pink" },
+
+    villain: { weight: 1, enabled: true, emoji: "😈", color: "purple" },
+
+    random: { weight: 1, enabled: false, emoji: "🤪", color: "orange" },
+
+    // advanced
+    titForTat: { weight: 1, enabled: true, emoji: "🤨", color: "blue" },
+
+    titForTwoTats: { weight: 1, enabled: true, emoji: "🧐", color: "blue" },
+
     forgivingTFT: {
-      weight: 2,
+      weight: 1,
       enabled: true,
       emoji: "😌",
       color: "blue",
@@ -13,10 +24,20 @@ const gameCfg = {
         forgivenessProbability: 0.25,
       },
     },
-    kind: { weight: 2, enabled: true, emoji: "😊", color: "pink" },
-    villain: { weight: 2, enabled: true, emoji: "😈", color: "purple" },
-    random: { weight: 1, enabled: false, emoji: "🤪", color: "orange" },
+
+    grudger: { weight: 1, enabled: true, emoji: "😠", color: "red" },
+
+    diplomat: {
+      weight: 1,
+      enabled: true,
+      emoji: "🤑",
+      color: "liliac",
+      options: { betrayChance: 0.333 },
+    },
+
+    // сomplex
   },
+
   personStates: {
     neutral: "😐",
     happy: "😃",
@@ -49,7 +70,7 @@ const gameCfg = {
   // Mechanics
 
   // population
-  population: 20,
+  population: 30,
   spawnCooldown: 20,
 
   // naturalDeath

@@ -6,6 +6,7 @@ export const MOVE = {
 export const DECISION = {
   cooperate: true,
   deceive: false,
+  defect: false,
 };
 
 export const BODY_CATEGORY = {
