@@ -3,12 +3,13 @@ export default function drawPerson(context, person) {
   const position = person.body.position;
   const rotation =
     Math.atan2(person.body.velocity.y, person.body.velocity.x) + Math.PI / 2;
+  const scale = person.view.transform.scale;
   const emoji = person.state || person.emoji;
   const color = person.view.fillStyle;
 
   context.save();
 
-  context.translate(position.x, position.y);
+  context.translate(position.x / scale, position.y / scale);
   context.rotate(rotation);
 
   context.fillStyle = color;

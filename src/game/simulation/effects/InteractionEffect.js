@@ -6,6 +6,12 @@ import { Transform } from "../../render";
 import Text from "../entities/Text/Text";
 import { hexOverlay } from "@/utils/color";
 
+const effectCfg = {
+  fontSize: 0.5,
+  emojiDuration: 0.5,
+  transitionDuration: 0.333,
+};
+
 export default class InteractionEffect extends GameEffect {
   constructor({ game, person, score, mistake }) {
     super({
@@ -30,9 +36,17 @@ export default class InteractionEffect extends GameEffect {
     this.colorTransition = new Transition({
       setter: (value) =>
         (this.person.view.fillStyle = hexOverlay(this.color, "#fff", value)),
-      from: 0.8,
+      from: 0.33,
       to: 0,
-      duration: this.duration / 3,
+      duration: this.duration * effectCfg.transitionDuration,
+      easing: "easeOut",
+    });
+
+    this.scaleTransition = new Transition({
+      setter: (value) => (this.person.view.transform.scale = value),
+      from: 1.2,
+      to: 1,
+      duration: this.duration * effectCfg.transitionDuration,
       easing: "easeOut",
     });
 
@@ -45,7 +59,7 @@ export default class InteractionEffect extends GameEffect {
           translate: { x: 0, y: -game.cfg.personSize },
         }),
         font: "Onest, sans-serif",
-        fontSize: game.cfg.personSize / 2,
+        fontSize: game.cfg.personSize * effectCfg.fontSize,
         fillStyle: "#fff",
       },
     });
@@ -64,6 +78,7 @@ export default class InteractionEffect extends GameEffect {
     this.person.state = null;
     this.person.view.fillStyle = this.color;
     this.colorTransition = null;
+    this.scaleTransition = null;
 
     this.game.removeEntity(this.text);
     this.text = null;
@@ -73,13 +88,16 @@ export default class InteractionEffect extends GameEffect {
   update(deltaTime) {
     this.colorTransition?.update(deltaTime);
     this.textTransition?.update(deltaTime);
+    this.scaleTransition?.update(deltaTime);
 
-    if (this.elapsedTime >= this.duration / 3) {
+    if (this.elapsedTime >= this.duration * effectCfg.transitionDuration) {
       this.person.view.fillStyle = this.color;
       this.colorTransition = null;
+      this.scaleTransition = null;
     }
 
-    if (this.elapsedTime >= this.duration / 2) this.person.state = null;
+    if (this.elapsedTime >= this.duration * effectCfg.emojiDuration)
+      this.person.state = null;
 
     if (this.elapsedTime >= this.duration) {
       this.game.removeEntity(this.text);
